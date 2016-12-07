@@ -10,7 +10,7 @@ namespace Resty.Controllers
         {
             //Do some stuff here to check service health
 
-            return JsonConvert.SerializeObject(new StatusModel() { Status = "Service running. No issues" });
+            return JsonConvert.SerializeObject(new StatusModel() { Status = "Service running. No issues. Hi Ian!" });
 
         }
     }
