@@ -6,11 +6,11 @@ namespace Resty.Controllers
 {
     public class StatusController : ApiController
     {
-        public string GetCurrentServiceStatus()
+        public IHttpActionResult GetCurrentServiceStatus()
         {
             //Do some stuff here to check service health
 
-            return JsonConvert.SerializeObject(new StatusModel() { Status = "Service running. No issues. Hi Ian!" });
+            return Ok(new StatusModel() { Status = "Service running. No issues. Hi Ian!" });
 
         }
     }
