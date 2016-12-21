@@ -46,7 +46,7 @@ namespace DataManagement.Repositories
                         select r).FirstOrDefault();
 
             if (user == null)
-                return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "User not found" };
+                return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Username/Password incorrect. Please try again." };
 
             return new ServiceCallResultModel() { bSuccessful = true };
         }

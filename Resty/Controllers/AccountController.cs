@@ -38,7 +38,7 @@ namespace Resty.Controllers
 
             if(!serviceCallResultModel.bSuccessful)
             {
-                return Content(System.Net.HttpStatusCode.Forbidden, new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Unable to register new accounts at this time." });
+                return Content(System.Net.HttpStatusCode.Forbidden, new ServiceCallResultModel() { bSuccessful = false, FailureReason = serviceCallResultModel.FailureReason });
             }
 
             return Ok(new ServiceCallResultModel() { bSuccessful = true });

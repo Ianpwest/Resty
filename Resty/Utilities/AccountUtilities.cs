@@ -111,7 +111,7 @@ namespace Resty.Utilities
 
             using (SHA512 shaM = new SHA512Managed())
             {
-                strEncryptedPassword = shaM.ComputeHash(bytes).ToString();
+                strEncryptedPassword = System.Text.Encoding.UTF8.GetString(shaM.ComputeHash(bytes)); 
             }
             
             return strEncryptedPassword;
