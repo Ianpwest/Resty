@@ -1,5 +1,5 @@
 ﻿
-namespace Resty.Models
+namespace DataManagement.Models
 {
     public class LogOnModel
     {

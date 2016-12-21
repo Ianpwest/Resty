@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resty", "Resty\Resty.csproj", "{C0DB8C17-C157-4C4D-98FB-B6CC4896132B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataManagement", "DataManagement\DataManagement.csproj", "{C4015BC3-7B22-42C7-B20B-2FE3366C3A59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{C0DB8C17-C157-4C4D-98FB-B6CC4896132B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0DB8C17-C157-4C4D-98FB-B6CC4896132B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0DB8C17-C157-4C4D-98FB-B6CC4896132B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4015BC3-7B22-42C7-B20B-2FE3366C3A59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4015BC3-7B22-42C7-B20B-2FE3366C3A59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4015BC3-7B22-42C7-B20B-2FE3366C3A59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4015BC3-7B22-42C7-B20B-2FE3366C3A59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

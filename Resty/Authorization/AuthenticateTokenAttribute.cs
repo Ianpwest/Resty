@@ -1,4 +1,5 @@
-﻿using System.Security.Principal;
+﻿using Resty.Utilities;
+using System.Security.Principal;
 using System.Web.Http;
 
 namespace Resty.Authorization
@@ -9,14 +10,17 @@ namespace Resty.Authorization
         {
             string token = actionContext.Request.Headers.Authorization.Parameter.ToString();
             
-            if(token != "666")
+            if(!AccountUtilities.ValidateTokenExists(token))
             {
                 actionContext.Response = new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.Forbidden);
             }
             else
             {
 
-                string userName = "Ian"; //GetUsernameFromDatabase(token)
+                string userName = AccountUtilities.GetUserNameFromToken(token);
+
+                if(userName == null)
+                    actionContext.Response = new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.Forbidden);
 
                 var identity = new GenericIdentity("UserName", "Forms");
                 

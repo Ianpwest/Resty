@@ -1,7 +1,9 @@
 ﻿
+using DataManagement.Models;
 using Newtonsoft.Json;
 using Resty.Authorization;
 using Resty.Models;
+using Resty.Utilities;
 using System.Web.Http;
 namespace Resty.Controllers
 {
@@ -11,15 +13,33 @@ namespace Resty.Controllers
         [HttpPost]
         public IHttpActionResult LogOn([FromBody]LogOnModel model)
         {
-            if(true) //Check valid user
+            if (model == null)
+                return Content(System.Net.HttpStatusCode.BadRequest, new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Request not formatted correctly." });
+
+            ServiceCallResultModel logOnResultModel = AccountUtilities.ValidateUserLogOn(model);
+
+            if(logOnResultModel.bSuccessful) //Check valid user
             {
-                return Content(System.Net.HttpStatusCode.Forbidden, "Could not authenticate user");
-                //return Ok(TokenManager.GenerateToken());
+                return Ok(new ServiceCallResultModel() { bSuccessful = true, Token = TokenManager.GenerateToken()});
             }
             else
             {
-                return Content(System.Net.HttpStatusCode.Forbidden, "Could not authenticate user");
+                return Content(System.Net.HttpStatusCode.Forbidden, new ServiceCallResultModel() { bSuccessful = false, FailureReason = logOnResultModel.FailureReason });
             }
+        }
+
+        [HttpPost]
+        public IHttpActionResult RegisterAccount([FromBody]AccountModel account)
+        {
+            if(account == null)
+                return Content(System.Net.HttpStatusCode.BadRequest, new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Request not formatted correctly." });
+
+            if(!AccountUtilities.RegisterAccount(account))
+            {
+                return Content(System.Net.HttpStatusCode.Forbidden, new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Unable to register new accounts at this time." });
+            }
+
+            return Ok(new ServiceCallResultModel() { bSuccessful = true });
         }
 
         [AuthenticateTokenAttribute]
