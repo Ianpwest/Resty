@@ -51,14 +51,25 @@ namespace Resty.Utilities
             }
         }
 
-        internal static bool RegisterAccount(AccountModel account)
+        internal static ServiceCallResultModel RegisterAccount(AccountModel account)
         {
             account.Salt = GetSalt();
             account.Password = Encrypt(account.Salt + account.Password);
 
             using (IAccountRepository repo = new AccountRepository())
             {
-                return repo.RegisterAccount(account);
+                //Verify username not already in use
+                if (!repo.IsUsernameUnique(account.Username))
+                {
+                    return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Username already exists. Please enter another." };
+                }
+
+                if(!repo.RegisterAccount(account))
+                {
+                    return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Cannot contact database at this time. Please try again." };
+                }
+
+                return new ServiceCallResultModel() { bSuccessful = true };
             }
         }
 

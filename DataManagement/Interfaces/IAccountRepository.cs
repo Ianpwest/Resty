@@ -9,7 +9,7 @@ namespace DataManagement.Interfaces
 {
     public interface IAccountRepository : IDisposable
     {
-        bool CheckUsernameUnique(string username);
+        bool IsUsernameUnique(string username);
 
         bool AddUser(AccountModel accountModel);
 

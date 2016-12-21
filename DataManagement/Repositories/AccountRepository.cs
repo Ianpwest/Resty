@@ -22,9 +22,20 @@ namespace DataManagement.Repositories
             throw new NotImplementedException();
         }
 
-        public bool CheckUsernameUnique(string username)
+        public bool IsUsernameUnique(string username)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(username))
+                return false;
+
+            var user = (from r in db.User
+                        where r.UserId == username
+                        select r).FirstOrDefault();
+
+            //No user found
+            if (user == null)
+                return true;
+
+            return false;
         }
 
         public ServiceCallResultModel ValidateUserLogOn(LogOnModel model)

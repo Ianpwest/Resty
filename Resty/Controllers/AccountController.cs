@@ -34,7 +34,9 @@ namespace Resty.Controllers
             if(account == null)
                 return Content(System.Net.HttpStatusCode.BadRequest, new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Request not formatted correctly." });
 
-            if(!AccountUtilities.RegisterAccount(account))
+            ServiceCallResultModel serviceCallResultModel = AccountUtilities.RegisterAccount(account);
+
+            if(!serviceCallResultModel.bSuccessful)
             {
                 return Content(System.Net.HttpStatusCode.Forbidden, new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Unable to register new accounts at this time." });
             }
