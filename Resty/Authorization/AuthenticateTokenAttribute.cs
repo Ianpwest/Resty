@@ -8,11 +8,19 @@ namespace Resty.Authorization
     {
         public override void OnAuthorization(System.Web.Http.Controllers.HttpActionContext actionContext)
         {
-            string token = actionContext.Request.Headers.Authorization.Parameter.ToString();
+            if(actionContext.Request.Headers.Authorization.Parameter == null)
+            {
+                actionContext.Response = new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.Forbidden);
+                return;
+            }
+                
+
+            string token = actionContext.Request.Headers.Authorization.Parameter;
             
             if(!AccountUtilities.ValidateTokenExists(token))
             {
                 actionContext.Response = new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.Forbidden);
+                return;
             }
             else
             {

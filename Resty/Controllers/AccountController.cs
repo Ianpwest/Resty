@@ -20,7 +20,7 @@ namespace Resty.Controllers
 
             if(logOnResultModel.bSuccessful) //Check valid user
             {
-                return Ok(new ServiceCallResultModel() { bSuccessful = true, Token = TokenManager.GenerateToken()});
+                return Ok(new ServiceCallResultModel() { bSuccessful = true, Token = logOnResultModel.Token});
             }
             else
             {
@@ -44,12 +44,13 @@ namespace Resty.Controllers
             return Ok(new ServiceCallResultModel() { bSuccessful = true });
         }
 
+        [HttpGet]
         [AuthenticateTokenAttribute]
         public IHttpActionResult GetYourName()
         {
             string requestingUser = (User as MyPrincipal).UserName;
-            return Ok("Your name is: " + requestingUser);
-            //return Content(System.Net.HttpStatusCode.Conflict, "Something bad happened");
+
+            return Ok(new ServiceCallResultModel() { bSuccessful = true, FailureReason = "Your name is: " + requestingUser });
         }
 
         [AuthenticateTokenAttribute]
