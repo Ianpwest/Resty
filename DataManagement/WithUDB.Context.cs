@@ -26,5 +26,6 @@ namespace DataManagement
         }
     
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Activity> Activity { get; set; }
     }
 }

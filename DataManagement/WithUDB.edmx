@@ -5,6 +5,25 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="WithUDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Activity">
+          <Key>
+            <PropertyRef Name="ActivityId" />
+          </Key>
+          <Property Name="ActivityId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="ExpiresDate" Type="datetime" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="150" />
+          <Property Name="StateId" Type="uniqueidentifier" />
+          <Property Name="CityId" Type="uniqueidentifier" />
+          <Property Name="ZipCode" Type="varchar" MaxLength="50" />
+          <Property Name="Latitude" Type="varchar" MaxLength="50" />
+          <Property Name="Longitude" Type="varchar" MaxLength="50" />
+          <Property Name="Description" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="CategoryId" Type="uniqueidentifier" />
+          <Property Name="AllowComments" Type="bit" Nullable="false" />
+          <Property Name="CreatedById" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="UserId" />
@@ -18,8 +37,25 @@
           <Property Name="Salt" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Token" Type="varchar" MaxLength="50" />
         </EntityType>
+        <Association Name="FK_Activity_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Activity" Type="Self.Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="CreatedById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="WithUDBModelStoreContainer">
+          <EntitySet Name="Activity" EntityType="Self.Activity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Activity_User" Association="Self.FK_Activity_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Activity" EntitySet="Activity" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -37,10 +73,48 @@
           <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Salt" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Token" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Activity" Relationship="WithUDBModel.FK_Activity_User" FromRole="User" ToRole="Activity" />
         </EntityType>
         <EntityContainer Name="WithUDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="Activity" EntityType="WithUDBModel.Activity" />
+          <AssociationSet Name="FK_Activity_User" Association="WithUDBModel.FK_Activity_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Activity" EntitySet="Activity" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Activity">
+          <Key>
+            <PropertyRef Name="ActivityId" />
+          </Key>
+          <Property Name="ActivityId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ExpiresDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Address" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="StateId" Type="Guid" />
+          <Property Name="CityId" Type="Guid" />
+          <Property Name="ZipCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="CategoryId" Type="Guid" />
+          <Property Name="AllowComments" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedById" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="User" Relationship="WithUDBModel.FK_Activity_User" FromRole="Activity" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Activity_User">
+          <End Type="WithUDBModel.User" Role="User" Multiplicity="1" />
+          <End Type="WithUDBModel.Activity" Role="Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="CreatedById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -58,6 +132,26 @@
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Salt" ColumnName="Salt" />
                 <ScalarProperty Name="Token" ColumnName="Token" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Activity">
+            <EntityTypeMapping TypeName="WithUDBModel.Activity">
+              <MappingFragment StoreEntitySet="Activity">
+                <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+                <ScalarProperty Name="AllowComments" ColumnName="AllowComments" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="CityId" ColumnName="CityId" />
+                <ScalarProperty Name="StateId" ColumnName="StateId" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="ExpiresDate" ColumnName="ExpiresDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

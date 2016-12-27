@@ -14,6 +14,12 @@ namespace DataManagement
     
     public partial class User
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public User()
+        {
+            this.Activity = new HashSet<Activity>();
+        }
+    
         public string UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -22,5 +28,8 @@ namespace DataManagement
         public string Password { get; set; }
         public string Salt { get; set; }
         public string Token { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Activity> Activity { get; set; }
     }
 }

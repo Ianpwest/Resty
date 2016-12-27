@@ -13,7 +13,7 @@ namespace DataManagement.Interfaces
 
         bool AddUser(AccountModel accountModel);
 
-        ServiceCallResultModel ValidateUserLogOn(LogOnModel model);
+        LogOnResultModel ValidateUserLogOn(LogOnModel model);
 
         bool UpdateUserToken(string username, string token);
 

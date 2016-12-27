@@ -12,7 +12,7 @@ namespace Resty.Utilities
 {
     public static class AccountUtilities
     {
-        internal static ServiceCallResultModel ValidateUserLogOn(LogOnModel model)
+        internal static LogOnResultModel ValidateUserLogOn(LogOnModel model)
         {
             using (IAccountRepository repo = new AccountRepository())
             {
@@ -20,7 +20,7 @@ namespace Resty.Utilities
                 string strSaltResult = repo.GetSaltForUser(model.Username);
 
                 if(strSaltResult == null)
-                    return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "User password salt not found" };
+                    return new LogOnResultModel() { bSuccessful = false, FailureReason = "User password salt not found" };
 
                 //Get the hash for this user given what they typed for their password and their salt
                 string strHashToCheck = GetHashPassword(model.Password, strSaltResult);
@@ -29,7 +29,7 @@ namespace Resty.Utilities
                 model.Password = strHashToCheck;
 
                 //Validate the user
-                ServiceCallResultModel returnModel = repo.ValidateUserLogOn(model);
+                LogOnResultModel returnModel = repo.ValidateUserLogOn(model);
 
                 //If successfully validated generate new token for user
                 if(returnModel.bSuccessful)
@@ -43,7 +43,7 @@ namespace Resty.Utilities
                     }
                     else
                     {
-                        return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Unable to get token." };
+                        return new LogOnResultModel() { bSuccessful = false, FailureReason = "Unable to get token." };
                     }
                 }
                 

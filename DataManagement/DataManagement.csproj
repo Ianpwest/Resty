@@ -51,9 +51,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activity.cs">
+      <DependentUpon>WithUDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces\IAccountRepository.cs" />
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\LogOnModel.cs" />
+    <Compile Include="Models\LogOnResultModel.cs" />
     <Compile Include="Models\ServiceCallResultModel.cs" />
     <Compile Include="Repositories\AccountRepository.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />

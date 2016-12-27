@@ -14,17 +14,17 @@ namespace Resty.Controllers
         public IHttpActionResult LogOn([FromBody]LogOnModel model)
         {
             if (model == null)
-                return Content(System.Net.HttpStatusCode.BadRequest, new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Request not formatted correctly." });
+                return Content(System.Net.HttpStatusCode.BadRequest, new LogOnResultModel() { bSuccessful = false, FailureReason = "Request not formatted correctly." });
 
-            ServiceCallResultModel logOnResultModel = AccountUtilities.ValidateUserLogOn(model);
+            LogOnResultModel logOnResultModel = AccountUtilities.ValidateUserLogOn(model);
 
             if(logOnResultModel.bSuccessful) //Check valid user
             {
-                return Ok(new ServiceCallResultModel() { bSuccessful = true, Token = logOnResultModel.Token});
+                return Ok(logOnResultModel);
             }
             else
             {
-                return Content(System.Net.HttpStatusCode.Forbidden, new ServiceCallResultModel() { bSuccessful = false, FailureReason = logOnResultModel.FailureReason });
+                return Content(System.Net.HttpStatusCode.Forbidden, new LogOnResultModel() { bSuccessful = false, FailureReason = logOnResultModel.FailureReason });
             }
         }
 

@@ -38,7 +38,7 @@ namespace DataManagement.Repositories
             return false;
         }
 
-        public ServiceCallResultModel ValidateUserLogOn(LogOnModel model)
+        public LogOnResultModel ValidateUserLogOn(LogOnModel model)
         {
             var user = (from r in db.User
                         where r.UserId == model.Username
@@ -46,9 +46,9 @@ namespace DataManagement.Repositories
                         select r).FirstOrDefault();
 
             if (user == null)
-                return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Username/Password incorrect. Please try again." };
+                return new LogOnResultModel() { bSuccessful = false, FailureReason = "Username/Password incorrect. Please try again." };
 
-            return new ServiceCallResultModel() { bSuccessful = true };
+            return new LogOnResultModel() { bSuccessful = true, FirstName = user.FirstName, LastName = user.LastName };
         }
 
         public bool UpdateUserToken(string username, string token)
