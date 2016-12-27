@@ -27,5 +27,7 @@ namespace DataManagement
     
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<Activity> Activity { get; set; }
+        public virtual DbSet<Activity_File> Activity_File { get; set; }
+        public virtual DbSet<File> File { get; set; }
     }
 }

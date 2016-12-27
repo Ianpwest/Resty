@@ -8,6 +8,10 @@
         <EntityTypeShape EntityType="WithUDBModel.User" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="WithUDBModel.Activity" Width="1.5" PointX="3.375" PointY="0.75" />
         <AssociationConnector Association="WithUDBModel.FK_Activity_User" />
+        <EntityTypeShape EntityType="WithUDBModel.Activity_File" Width="1.5" PointX="7.875" PointY="2" />
+        <EntityTypeShape EntityType="WithUDBModel.File" Width="1.5" PointX="5.625" PointY="6.125" />
+        <AssociationConnector Association="WithUDBModel.FK_Activity_File_Activity" />
+        <AssociationConnector Association="WithUDBModel.FK_Activity_File_File" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

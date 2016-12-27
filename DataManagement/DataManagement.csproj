@@ -54,6 +54,12 @@
     <Compile Include="Activity.cs">
       <DependentUpon>WithUDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Activity_File.cs">
+      <DependentUpon>WithUDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="File.cs">
+      <DependentUpon>WithUDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces\IAccountRepository.cs" />
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\LogOnModel.cs" />

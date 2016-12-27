@@ -12,30 +12,19 @@ namespace DataManagement
     using System;
     using System.Collections.Generic;
     
-    public partial class Activity
+    public partial class File
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Activity()
+        public File()
         {
             this.Activity_File = new HashSet<Activity_File>();
         }
     
-        public System.Guid ActivityId { get; set; }
+        public System.Guid FileId { get; set; }
         public string Name { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime ExpiresDate { get; set; }
-        public string Address { get; set; }
-        public Nullable<System.Guid> StateId { get; set; }
-        public Nullable<System.Guid> CityId { get; set; }
-        public string ZipCode { get; set; }
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
-        public string Description { get; set; }
-        public Nullable<System.Guid> CategoryId { get; set; }
-        public bool AllowComments { get; set; }
-        public string CreatedById { get; set; }
+        public string Extension { get; set; }
+        public string Path { get; set; }
     
-        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Activity_File> Activity_File { get; set; }
     }

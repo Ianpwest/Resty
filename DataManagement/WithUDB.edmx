@@ -24,6 +24,23 @@
           <Property Name="AllowComments" Type="bit" Nullable="false" />
           <Property Name="CreatedById" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="Activity_File">
+          <Key>
+            <PropertyRef Name="ActivityFileId" />
+          </Key>
+          <Property Name="ActivityFileId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ActivityId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FileId" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="File">
+          <Key>
+            <PropertyRef Name="FileId" />
+          </Key>
+          <Property Name="FileId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Extension" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Path" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="UserId" />
@@ -37,6 +54,30 @@
           <Property Name="Salt" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Token" Type="varchar" MaxLength="50" />
         </EntityType>
+        <Association Name="FK_Activity_File_Activity">
+          <End Role="Activity" Type="Self.Activity" Multiplicity="1" />
+          <End Role="Activity_File" Type="Self.Activity_File" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activity">
+              <PropertyRef Name="ActivityId" />
+            </Principal>
+            <Dependent Role="Activity_File">
+              <PropertyRef Name="ActivityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Activity_File_File">
+          <End Role="File" Type="Self.File" Multiplicity="1" />
+          <End Role="Activity_File" Type="Self.Activity_File" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="File">
+              <PropertyRef Name="FileId" />
+            </Principal>
+            <Dependent Role="Activity_File">
+              <PropertyRef Name="FileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Activity_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="Activity" Type="Self.Activity" Multiplicity="*" />
@@ -51,7 +92,17 @@
         </Association>
         <EntityContainer Name="WithUDBModelStoreContainer">
           <EntitySet Name="Activity" EntityType="Self.Activity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Activity_File" EntityType="Self.Activity_File" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="File" EntityType="Self.File" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Activity_File_Activity" Association="Self.FK_Activity_File_Activity">
+            <End Role="Activity" EntitySet="Activity" />
+            <End Role="Activity_File" EntitySet="Activity_File" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Activity_File_File" Association="Self.FK_Activity_File_File">
+            <End Role="File" EntitySet="File" />
+            <End Role="Activity_File" EntitySet="Activity_File" />
+          </AssociationSet>
           <AssociationSet Name="FK_Activity_User" Association="Self.FK_Activity_User">
             <End Role="User" EntitySet="User" />
             <End Role="Activity" EntitySet="Activity" />
@@ -82,6 +133,16 @@
             <End Role="User" EntitySet="User" />
             <End Role="Activity" EntitySet="Activity" />
           </AssociationSet>
+          <EntitySet Name="Activity_File" EntityType="WithUDBModel.Activity_File" />
+          <EntitySet Name="File" EntityType="WithUDBModel.File" />
+          <AssociationSet Name="FK_Activity_File_Activity" Association="WithUDBModel.FK_Activity_File_Activity">
+            <End Role="Activity" EntitySet="Activity" />
+            <End Role="Activity_File" EntitySet="Activity_File" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Activity_File_File" Association="WithUDBModel.FK_Activity_File_File">
+            <End Role="File" EntitySet="File" />
+            <End Role="Activity_File" EntitySet="Activity_File" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Activity">
           <Key>
@@ -102,6 +163,7 @@
           <Property Name="AllowComments" Type="Boolean" Nullable="false" />
           <Property Name="CreatedById" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="User" Relationship="WithUDBModel.FK_Activity_User" FromRole="Activity" ToRole="User" />
+          <NavigationProperty Name="Activity_File" Relationship="WithUDBModel.FK_Activity_File_Activity" FromRole="Activity" ToRole="Activity_File" />
         </EntityType>
         <Association Name="FK_Activity_User">
           <End Type="WithUDBModel.User" Role="User" Multiplicity="1" />
@@ -112,6 +174,50 @@
             </Principal>
             <Dependent Role="Activity">
               <PropertyRef Name="CreatedById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Activity_File">
+          <Key>
+            <PropertyRef Name="ActivityFileId" />
+          </Key>
+          <Property Name="ActivityFileId" Type="Guid" Nullable="false" />
+          <Property Name="ActivityId" Type="Guid" Nullable="false" />
+          <Property Name="FileId" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Activity" Relationship="WithUDBModel.FK_Activity_File_Activity" FromRole="Activity_File" ToRole="Activity" />
+          <NavigationProperty Name="File" Relationship="WithUDBModel.FK_Activity_File_File" FromRole="Activity_File" ToRole="File" />
+        </EntityType>
+        <EntityType Name="File">
+          <Key>
+            <PropertyRef Name="FileId" />
+          </Key>
+          <Property Name="FileId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Extension" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Activity_File" Relationship="WithUDBModel.FK_Activity_File_File" FromRole="File" ToRole="Activity_File" />
+          <Property Name="Path" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_Activity_File_Activity">
+          <End Type="WithUDBModel.Activity" Role="Activity" Multiplicity="1" />
+          <End Type="WithUDBModel.Activity_File" Role="Activity_File" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activity">
+              <PropertyRef Name="ActivityId" />
+            </Principal>
+            <Dependent Role="Activity_File">
+              <PropertyRef Name="ActivityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Activity_File_File">
+          <End Type="WithUDBModel.File" Role="File" Multiplicity="1" />
+          <End Type="WithUDBModel.Activity_File" Role="Activity_File" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="File">
+              <PropertyRef Name="FileId" />
+            </Principal>
+            <Dependent Role="Activity_File">
+              <PropertyRef Name="FileId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -152,6 +258,25 @@
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Activity_File">
+            <EntityTypeMapping TypeName="WithUDBModel.Activity_File">
+              <MappingFragment StoreEntitySet="Activity_File">
+                <ScalarProperty Name="FileId" ColumnName="FileId" />
+                <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
+                <ScalarProperty Name="ActivityFileId" ColumnName="ActivityFileId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="File">
+            <EntityTypeMapping TypeName="WithUDBModel.File">
+              <MappingFragment StoreEntitySet="File">
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="Extension" ColumnName="Extension" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="FileId" ColumnName="FileId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
