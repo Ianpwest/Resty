@@ -21,22 +21,30 @@ namespace DataManagement
         }
     
         public System.Guid ActivityId { get; set; }
-        public string Name { get; set; }
+        public string Title { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public System.DateTime ExpiresDate { get; set; }
         public string Address { get; set; }
-        public Nullable<System.Guid> StateId { get; set; }
-        public Nullable<System.Guid> CityId { get; set; }
+        public string StateId { get; set; }
+        public string CityId { get; set; }
         public string ZipCode { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string Description { get; set; }
-        public Nullable<System.Guid> CategoryId { get; set; }
+        public string CategoryId { get; set; }
         public bool AllowComments { get; set; }
         public string CreatedById { get; set; }
+        public string LookingFor { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public string StartTime { get; set; }
+        public string CostId { get; set; }
     
-        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Activity_File> Activity_File { get; set; }
+        public virtual lst_Category lst_Category { get; set; }
+        public virtual lst_City lst_City { get; set; }
+        public virtual lst_Cost lst_Cost { get; set; }
+        public virtual lst_State lst_State { get; set; }
+        public virtual User User { get; set; }
     }
 }

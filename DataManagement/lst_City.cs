@@ -12,25 +12,19 @@ namespace DataManagement
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class lst_City
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User()
+        public lst_City()
         {
             this.Activity = new HashSet<Activity>();
         }
     
-        public string UserId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string EmailAddress { get; set; }
-        public System.DateTime DateCreated { get; set; }
-        public string Password { get; set; }
-        public string Salt { get; set; }
-        public string Token { get; set; }
-        public string ResetPasswordToken { get; set; }
+        public string CityId { get; set; }
+        public string StateId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Activity> Activity { get; set; }
+        public virtual lst_State lst_State { get; set; }
     }
 }

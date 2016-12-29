@@ -61,6 +61,18 @@
       <DependentUpon>WithUDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IAccountRepository.cs" />
+    <Compile Include="lst_Category.cs">
+      <DependentUpon>WithUDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="lst_City.cs">
+      <DependentUpon>WithUDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="lst_Cost.cs">
+      <DependentUpon>WithUDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="lst_State.cs">
+      <DependentUpon>WithUDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\LogOnResultModel.cs" />

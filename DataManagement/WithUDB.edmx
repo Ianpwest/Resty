@@ -10,19 +10,23 @@
             <PropertyRef Name="ActivityId" />
           </Key>
           <Property Name="ActivityId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="ExpiresDate" Type="datetime" Nullable="false" />
           <Property Name="Address" Type="varchar" MaxLength="150" />
-          <Property Name="StateId" Type="uniqueidentifier" />
-          <Property Name="CityId" Type="uniqueidentifier" />
+          <Property Name="StateId" Type="varchar" MaxLength="50" />
+          <Property Name="CityId" Type="varchar" MaxLength="50" />
           <Property Name="ZipCode" Type="varchar" MaxLength="50" />
           <Property Name="Latitude" Type="varchar" MaxLength="50" />
           <Property Name="Longitude" Type="varchar" MaxLength="50" />
           <Property Name="Description" Type="varchar" MaxLength="1000" Nullable="false" />
-          <Property Name="CategoryId" Type="uniqueidentifier" />
+          <Property Name="CategoryId" Type="varchar" MaxLength="50" />
           <Property Name="AllowComments" Type="bit" Nullable="false" />
           <Property Name="CreatedById" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LookingFor" Type="varchar" MaxLength="1000" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="StartTime" Type="varchar" MaxLength="50" />
+          <Property Name="CostId" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Activity_File">
           <Key>
@@ -41,6 +45,31 @@
           <Property Name="Extension" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Path" Type="varchar" MaxLength="200" Nullable="false" />
         </EntityType>
+        <EntityType Name="lst_Category">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="lst_City">
+          <Key>
+            <PropertyRef Name="CityId" />
+          </Key>
+          <Property Name="CityId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="StateId" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="lst_Cost">
+          <Key>
+            <PropertyRef Name="CostId" />
+          </Key>
+          <Property Name="CostId" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="lst_State">
+          <Key>
+            <PropertyRef Name="StateId" />
+          </Key>
+          <Property Name="StateId" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="UserId" />
@@ -53,6 +82,7 @@
           <Property Name="Password" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Salt" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Token" Type="varchar" MaxLength="50" />
+          <Property Name="ResetPasswordToken" Type="varchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_Activity_File_Activity">
           <End Role="Activity" Type="Self.Activity" Multiplicity="1" />
@@ -78,6 +108,54 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Activity_lst_Category">
+          <End Role="lst_Category" Type="Self.lst_Category" Multiplicity="0..1" />
+          <End Role="Activity" Type="Self.Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lst_Category">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Activity_lst_City">
+          <End Role="lst_City" Type="Self.lst_City" Multiplicity="0..1" />
+          <End Role="Activity" Type="Self.Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lst_City">
+              <PropertyRef Name="CityId" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="CityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Activity_lst_Cost">
+          <End Role="lst_Cost" Type="Self.lst_Cost" Multiplicity="0..1" />
+          <End Role="Activity" Type="Self.Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lst_Cost">
+              <PropertyRef Name="CostId" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="CostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Activity_lst_State">
+          <End Role="lst_State" Type="Self.lst_State" Multiplicity="0..1" />
+          <End Role="Activity" Type="Self.Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lst_State">
+              <PropertyRef Name="StateId" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="StateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Activity_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="Activity" Type="Self.Activity" Multiplicity="*" />
@@ -90,10 +168,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_lstCity_lstState">
+          <End Role="lst_State" Type="Self.lst_State" Multiplicity="1" />
+          <End Role="lst_City" Type="Self.lst_City" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lst_State">
+              <PropertyRef Name="StateId" />
+            </Principal>
+            <Dependent Role="lst_City">
+              <PropertyRef Name="StateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="WithUDBModelStoreContainer">
           <EntitySet Name="Activity" EntityType="Self.Activity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Activity_File" EntityType="Self.Activity_File" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="File" EntityType="Self.File" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="lst_Category" EntityType="Self.lst_Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="lst_City" EntityType="Self.lst_City" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="lst_Cost" EntityType="Self.lst_Cost" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="lst_State" EntityType="Self.lst_State" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Activity_File_Activity" Association="Self.FK_Activity_File_Activity">
             <End Role="Activity" EntitySet="Activity" />
@@ -103,45 +197,75 @@
             <End Role="File" EntitySet="File" />
             <End Role="Activity_File" EntitySet="Activity_File" />
           </AssociationSet>
+          <AssociationSet Name="FK_Activity_lst_Category" Association="Self.FK_Activity_lst_Category">
+            <End Role="lst_Category" EntitySet="lst_Category" />
+            <End Role="Activity" EntitySet="Activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Activity_lst_City" Association="Self.FK_Activity_lst_City">
+            <End Role="lst_City" EntitySet="lst_City" />
+            <End Role="Activity" EntitySet="Activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Activity_lst_Cost" Association="Self.FK_Activity_lst_Cost">
+            <End Role="lst_Cost" EntitySet="lst_Cost" />
+            <End Role="Activity" EntitySet="Activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Activity_lst_State" Association="Self.FK_Activity_lst_State">
+            <End Role="lst_State" EntitySet="lst_State" />
+            <End Role="Activity" EntitySet="Activity" />
+          </AssociationSet>
           <AssociationSet Name="FK_Activity_User" Association="Self.FK_Activity_User">
             <End Role="User" EntitySet="User" />
             <End Role="Activity" EntitySet="Activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_lstCity_lstState" Association="Self.FK_lstCity_lstState">
+            <End Role="lst_State" EntitySet="lst_State" />
+            <End Role="lst_City" EntitySet="lst_City" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="WithUDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="UserId" />
-          </Key>
-          <Property Name="UserId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="EmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Salt" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Token" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Activity" Relationship="WithUDBModel.FK_Activity_User" FromRole="User" ToRole="Activity" />
-        </EntityType>
         <EntityContainer Name="WithUDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="User" EntityType="Self.User" />
           <EntitySet Name="Activity" EntityType="WithUDBModel.Activity" />
-          <AssociationSet Name="FK_Activity_User" Association="WithUDBModel.FK_Activity_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="Activity" EntitySet="Activity" />
-          </AssociationSet>
           <EntitySet Name="Activity_File" EntityType="WithUDBModel.Activity_File" />
           <EntitySet Name="File" EntityType="WithUDBModel.File" />
+          <EntitySet Name="lst_Category" EntityType="WithUDBModel.lst_Category" />
+          <EntitySet Name="lst_City" EntityType="WithUDBModel.lst_City" />
+          <EntitySet Name="lst_Cost" EntityType="WithUDBModel.lst_Cost" />
+          <EntitySet Name="lst_State" EntityType="WithUDBModel.lst_State" />
+          <EntitySet Name="User" EntityType="WithUDBModel.User" />
           <AssociationSet Name="FK_Activity_File_Activity" Association="WithUDBModel.FK_Activity_File_Activity">
             <End Role="Activity" EntitySet="Activity" />
             <End Role="Activity_File" EntitySet="Activity_File" />
           </AssociationSet>
+          <AssociationSet Name="FK_Activity_lst_Category" Association="WithUDBModel.FK_Activity_lst_Category">
+            <End Role="lst_Category" EntitySet="lst_Category" />
+            <End Role="Activity" EntitySet="Activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Activity_lst_City" Association="WithUDBModel.FK_Activity_lst_City">
+            <End Role="lst_City" EntitySet="lst_City" />
+            <End Role="Activity" EntitySet="Activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Activity_lst_Cost" Association="WithUDBModel.FK_Activity_lst_Cost">
+            <End Role="lst_Cost" EntitySet="lst_Cost" />
+            <End Role="Activity" EntitySet="Activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Activity_lst_State" Association="WithUDBModel.FK_Activity_lst_State">
+            <End Role="lst_State" EntitySet="lst_State" />
+            <End Role="Activity" EntitySet="Activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Activity_User" Association="WithUDBModel.FK_Activity_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Activity" EntitySet="Activity" />
+          </AssociationSet>
           <AssociationSet Name="FK_Activity_File_File" Association="WithUDBModel.FK_Activity_File_File">
             <End Role="File" EntitySet="File" />
             <End Role="Activity_File" EntitySet="Activity_File" />
+          </AssociationSet>
+          <AssociationSet Name="FK_lstCity_lstState" Association="WithUDBModel.FK_lstCity_lstState">
+            <End Role="lst_State" EntitySet="lst_State" />
+            <End Role="lst_City" EntitySet="lst_City" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Activity">
@@ -149,34 +273,30 @@
             <PropertyRef Name="ActivityId" />
           </Key>
           <Property Name="ActivityId" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ExpiresDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Address" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="StateId" Type="Guid" />
-          <Property Name="CityId" Type="Guid" />
+          <Property Name="StateId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CityId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ZipCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
-          <Property Name="CategoryId" Type="Guid" />
+          <Property Name="CategoryId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="AllowComments" Type="Boolean" Nullable="false" />
           <Property Name="CreatedById" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="User" Relationship="WithUDBModel.FK_Activity_User" FromRole="Activity" ToRole="User" />
+          <Property Name="LookingFor" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="StartTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CostId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Activity_File" Relationship="WithUDBModel.FK_Activity_File_Activity" FromRole="Activity" ToRole="Activity_File" />
+          <NavigationProperty Name="lst_Category" Relationship="WithUDBModel.FK_Activity_lst_Category" FromRole="Activity" ToRole="lst_Category" />
+          <NavigationProperty Name="lst_City" Relationship="WithUDBModel.FK_Activity_lst_City" FromRole="Activity" ToRole="lst_City" />
+          <NavigationProperty Name="lst_Cost" Relationship="WithUDBModel.FK_Activity_lst_Cost" FromRole="Activity" ToRole="lst_Cost" />
+          <NavigationProperty Name="lst_State" Relationship="WithUDBModel.FK_Activity_lst_State" FromRole="Activity" ToRole="lst_State" />
+          <NavigationProperty Name="User" Relationship="WithUDBModel.FK_Activity_User" FromRole="Activity" ToRole="User" />
         </EntityType>
-        <Association Name="FK_Activity_User">
-          <End Type="WithUDBModel.User" Role="User" Multiplicity="1" />
-          <End Type="WithUDBModel.Activity" Role="Activity" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="Activity">
-              <PropertyRef Name="CreatedById" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Activity_File">
           <Key>
             <PropertyRef Name="ActivityFileId" />
@@ -192,10 +312,56 @@
             <PropertyRef Name="FileId" />
           </Key>
           <Property Name="FileId" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Extension" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Activity_File" Relationship="WithUDBModel.FK_Activity_File_File" FromRole="File" ToRole="Activity_File" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Extension" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Path" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Activity_File" Relationship="WithUDBModel.FK_Activity_File_File" FromRole="File" ToRole="Activity_File" />
+        </EntityType>
+        <EntityType Name="lst_Category">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Activity" Relationship="WithUDBModel.FK_Activity_lst_Category" FromRole="lst_Category" ToRole="Activity" />
+        </EntityType>
+        <EntityType Name="lst_City">
+          <Key>
+            <PropertyRef Name="CityId" />
+          </Key>
+          <Property Name="CityId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StateId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Activity" Relationship="WithUDBModel.FK_Activity_lst_City" FromRole="lst_City" ToRole="Activity" />
+          <NavigationProperty Name="lst_State" Relationship="WithUDBModel.FK_lstCity_lstState" FromRole="lst_City" ToRole="lst_State" />
+        </EntityType>
+        <EntityType Name="lst_Cost">
+          <Key>
+            <PropertyRef Name="CostId" />
+          </Key>
+          <Property Name="CostId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Activity" Relationship="WithUDBModel.FK_Activity_lst_Cost" FromRole="lst_Cost" ToRole="Activity" />
+        </EntityType>
+        <EntityType Name="lst_State">
+          <Key>
+            <PropertyRef Name="StateId" />
+          </Key>
+          <Property Name="StateId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Activity" Relationship="WithUDBModel.FK_Activity_lst_State" FromRole="lst_State" ToRole="Activity" />
+          <NavigationProperty Name="lst_City" Relationship="WithUDBModel.FK_lstCity_lstState" FromRole="lst_State" ToRole="lst_City" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmailAddress" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Salt" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Token" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ResetPasswordToken" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Activity" Relationship="WithUDBModel.FK_Activity_User" FromRole="User" ToRole="Activity" />
         </EntityType>
         <Association Name="FK_Activity_File_Activity">
           <End Type="WithUDBModel.Activity" Role="Activity" Multiplicity="1" />
@@ -206,6 +372,66 @@
             </Principal>
             <Dependent Role="Activity_File">
               <PropertyRef Name="ActivityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Activity_lst_Category">
+          <End Type="WithUDBModel.lst_Category" Role="lst_Category" Multiplicity="0..1" />
+          <End Type="WithUDBModel.Activity" Role="Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lst_Category">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Activity_lst_City">
+          <End Type="WithUDBModel.lst_City" Role="lst_City" Multiplicity="0..1" />
+          <End Type="WithUDBModel.Activity" Role="Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lst_City">
+              <PropertyRef Name="CityId" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="CityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Activity_lst_Cost">
+          <End Type="WithUDBModel.lst_Cost" Role="lst_Cost" Multiplicity="0..1" />
+          <End Type="WithUDBModel.Activity" Role="Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lst_Cost">
+              <PropertyRef Name="CostId" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="CostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Activity_lst_State">
+          <End Type="WithUDBModel.lst_State" Role="lst_State" Multiplicity="0..1" />
+          <End Type="WithUDBModel.Activity" Role="Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lst_State">
+              <PropertyRef Name="StateId" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="StateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Activity_User">
+          <End Type="WithUDBModel.User" Role="User" Multiplicity="1" />
+          <End Type="WithUDBModel.Activity" Role="Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="CreatedById" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -221,29 +447,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="FK_lstCity_lstState">
+          <End Type="WithUDBModel.lst_State" Role="lst_State" Multiplicity="1" />
+          <End Type="WithUDBModel.lst_City" Role="lst_City" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lst_State">
+              <PropertyRef Name="StateId" />
+            </Principal>
+            <Dependent Role="lst_City">
+              <PropertyRef Name="StateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="WithUDBModelStoreContainer" CdmEntityContainer="WithUDBEntities">
-          <EntitySetMapping Name="User">
-            <EntityTypeMapping TypeName="WithUDBModel.User">
-              <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Salt" ColumnName="Salt" />
-                <ScalarProperty Name="Token" ColumnName="Token" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Activity">
             <EntityTypeMapping TypeName="WithUDBModel.Activity">
               <MappingFragment StoreEntitySet="Activity">
+                <ScalarProperty Name="CostId" ColumnName="CostId" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="LookingFor" ColumnName="LookingFor" />
                 <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
                 <ScalarProperty Name="AllowComments" ColumnName="AllowComments" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
@@ -256,7 +484,7 @@
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="ExpiresDate" ColumnName="ExpiresDate" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -277,6 +505,50 @@
                 <ScalarProperty Name="Extension" ColumnName="Extension" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="FileId" ColumnName="FileId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lst_Category">
+            <EntityTypeMapping TypeName="WithUDBModel.lst_Category">
+              <MappingFragment StoreEntitySet="lst_Category">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lst_City">
+            <EntityTypeMapping TypeName="WithUDBModel.lst_City">
+              <MappingFragment StoreEntitySet="lst_City">
+                <ScalarProperty Name="StateId" ColumnName="StateId" />
+                <ScalarProperty Name="CityId" ColumnName="CityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lst_Cost">
+            <EntityTypeMapping TypeName="WithUDBModel.lst_Cost">
+              <MappingFragment StoreEntitySet="lst_Cost">
+                <ScalarProperty Name="CostId" ColumnName="CostId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lst_State">
+            <EntityTypeMapping TypeName="WithUDBModel.lst_State">
+              <MappingFragment StoreEntitySet="lst_State">
+                <ScalarProperty Name="StateId" ColumnName="StateId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="WithUDBModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="ResetPasswordToken" ColumnName="ResetPasswordToken" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="Salt" ColumnName="Salt" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

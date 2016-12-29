@@ -5,13 +5,22 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="19440395dfdb4cc8b9f054fb8316c51e" Name="Diagram1">
-        <EntityTypeShape EntityType="WithUDBModel.User" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="WithUDBModel.Activity" Width="1.5" PointX="3.375" PointY="0.75" />
-        <AssociationConnector Association="WithUDBModel.FK_Activity_User" />
-        <EntityTypeShape EntityType="WithUDBModel.Activity_File" Width="1.5" PointX="7.875" PointY="2" />
-        <EntityTypeShape EntityType="WithUDBModel.File" Width="1.5" PointX="5.625" PointY="6.125" />
+        <EntityTypeShape EntityType="WithUDBModel.Activity" Width="1.5" PointX="5.25" PointY="5.75" />
+        <EntityTypeShape EntityType="WithUDBModel.Activity_File" Width="1.5" PointX="7.5" PointY="7.625" />
+        <EntityTypeShape EntityType="WithUDBModel.File" Width="1.5" PointX="5.25" PointY="2.625" />
+        <EntityTypeShape EntityType="WithUDBModel.lst_Category" Width="1.5" PointX="3" PointY="13.75" />
+        <EntityTypeShape EntityType="WithUDBModel.lst_City" Width="1.5" PointX="3" PointY="10.75" />
+        <EntityTypeShape EntityType="WithUDBModel.lst_Cost" Width="1.5" PointX="3" PointY="8.625" />
+        <EntityTypeShape EntityType="WithUDBModel.lst_State" Width="1.5" PointX="0.75" PointY="4.5" />
+        <EntityTypeShape EntityType="WithUDBModel.User" Width="1.5" PointX="3" PointY="4.875" />
         <AssociationConnector Association="WithUDBModel.FK_Activity_File_Activity" />
+        <AssociationConnector Association="WithUDBModel.FK_Activity_lst_Category" />
+        <AssociationConnector Association="WithUDBModel.FK_Activity_lst_City" />
+        <AssociationConnector Association="WithUDBModel.FK_Activity_lst_Cost" />
+        <AssociationConnector Association="WithUDBModel.FK_Activity_lst_State" />
+        <AssociationConnector Association="WithUDBModel.FK_Activity_User" />
         <AssociationConnector Association="WithUDBModel.FK_Activity_File_File" />
+        <AssociationConnector Association="WithUDBModel.FK_lstCity_lstState" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
