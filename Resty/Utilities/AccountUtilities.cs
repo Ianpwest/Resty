@@ -110,6 +110,18 @@ namespace Resty.Utilities
             return new ServiceCallResultModel() { bSuccessful = true };
         }
 
+        internal static void ResendActivationEmail(string email)
+        {
+            string activationToken;
+
+            using (IAccountRepository repo = new AccountRepository())
+            {
+                activationToken = repo.GetActivationTokenForUser(email);
+            }
+
+            SendActivationEmail(email, activationToken);
+        }
+
         internal static ServiceCallResultModel ActivateAccount(string activationToken)
         {
             using (IAccountRepository repo = new AccountRepository())
@@ -165,8 +177,8 @@ namespace Resty.Utilities
             myMessage.Subject = "Account activation";
 
             //Add the HTML and Text bodies
-            myMessage.Html = "<h4>Welcome to WithU! Please activate your account by clicking the link below</h4><br/><br/>";
-            myMessage.Html += "<p>Activation Link: </p><a>https://resty.azurewebsites.net/Activation/ActivateAccount?activationToken=" + activationToken;
+            myMessage.Html = "<h4>Welcome to WithU! Please activate your account by clicking the link below</h4><br/>";
+            myMessage.Html += "<a href='https://resty.azurewebsites.net/Activation/ActivateAccount?activationToken=" + activationToken + "'>Click me to activate</a>";
 
             // Create credentials, specifying your user name and password.
             var credentials = new NetworkCredential("azure_d6838b6e2dbb20423623ce113e70b114@azure.com", "Snowheyoh1");

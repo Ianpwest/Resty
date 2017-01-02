@@ -196,11 +196,22 @@ namespace DataManagement.Repositories
             return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Failed to update database. Please try again" };
         }
 
+        public string GetActivationTokenForUser(string email)
+        {
+            var user = (from r in db.User
+                        where r.EmailAddress == email
+                        select r).FirstOrDefault();
+
+            if (user == null)
+                return string.Empty;
+
+            return user.ActivationToken;
+        }
+
         public void Dispose()
         {
             db.Dispose();
         }
-
         
     }
 }

@@ -76,6 +76,17 @@ namespace Resty.Controllers
             return Ok(new ServiceCallResultModel() { bSuccessful = true });
         }
 
+        [HttpPost]
+        public IHttpActionResult ResendActivationEmail([FromBody]AccountModel account)
+        {
+            if(account == null)
+                return Content(System.Net.HttpStatusCode.BadRequest, new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Request not formatted correctly." });
+
+            AccountUtilities.ResendActivationEmail(account.Email);
+
+            return Ok(new ServiceCallResultModel() { bSuccessful = true });
+        }
+
         [HttpGet]
         [AuthenticateTokenAttribute]
         public IHttpActionResult GetYourName()
