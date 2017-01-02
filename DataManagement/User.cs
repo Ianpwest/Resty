@@ -22,5 +22,7 @@ namespace DataManagement
         public string Salt { get; set; }
         public string Token { get; set; }
         public string ResetPasswordToken { get; set; }
+        public bool IsActivated { get; set; }
+        public string ActivationToken { get; set; }
     }
 }

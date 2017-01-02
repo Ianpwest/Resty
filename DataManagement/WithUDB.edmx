@@ -88,6 +88,8 @@
           <Property Name="Salt" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Token" Type="varchar" MaxLength="50" />
           <Property Name="ResetPasswordToken" Type="varchar" MaxLength="50" />
+          <Property Name="IsActivated" Type="bit" Nullable="false" />
+          <Property Name="ActivationToken" Type="varchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_Activity_File_Activity">
           <End Role="Activity" Type="Self.Activity" Multiplicity="1" />
@@ -352,6 +354,8 @@
           <Property Name="Salt" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Token" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ResetPasswordToken" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActivated" Type="Boolean" Nullable="false" />
+          <Property Name="ActivationToken" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_Activity_File_Activity">
           <End Type="WithUDBModel.Activity" Role="Activity" Multiplicity="1" />
@@ -525,6 +529,8 @@
           <EntitySetMapping Name="User">
             <EntityTypeMapping TypeName="WithUDBModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="ActivationToken" ColumnName="ActivationToken" />
+                <ScalarProperty Name="IsActivated" ColumnName="IsActivated" />
                 <ScalarProperty Name="ResetPasswordToken" ColumnName="ResetPasswordToken" />
                 <ScalarProperty Name="Token" ColumnName="Token" />
                 <ScalarProperty Name="Salt" ColumnName="Salt" />

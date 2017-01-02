@@ -11,8 +11,6 @@ namespace DataManagement.Interfaces
     {
         bool IsEmailUnique(string email);
 
-        bool AddUser(AccountModel accountModel);
-
         LogOnResultModel ValidateUserLogOn(LogOnModel model);
 
         bool UpdateUserToken(string email, string token);
@@ -25,5 +23,6 @@ namespace DataManagement.Interfaces
         bool ValidateEmailExists(string email);
         bool UpdateUsersResetPasswordToken(string email, string resetToken);
         ServiceCallResultModel ResetPassword(ResetPasswordModel resetPasswordModel);
+        ServiceCallResultModel ActivateAccount(string activationToken);
     }
 }

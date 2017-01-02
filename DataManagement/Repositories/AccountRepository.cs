@@ -17,11 +17,6 @@ namespace DataManagement.Repositories
             db = new WithUDBEntities();
         }
 
-        public bool AddUser(AccountModel accountModel)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool IsEmailUnique(string email)
         {
             if (string.IsNullOrEmpty(email))
@@ -47,6 +42,9 @@ namespace DataManagement.Repositories
 
             if (user == null)
                 return new LogOnResultModel() { bSuccessful = false, FailureReason = "Username/Password incorrect. Please try again." };
+
+            if(!user.IsActivated)
+                return new LogOnResultModel() { bSuccessful = false, FailureReason = "Please check your email to activate your account." };
 
             return new LogOnResultModel() { bSuccessful = true, FirstName = user.FirstName, LastName = user.LastName };
         }
@@ -108,6 +106,7 @@ namespace DataManagement.Repositories
             user.Salt = account.Salt;
             user.EmailAddress = account.Email;
             user.DateCreated = DateTime.Now;
+            user.ActivationToken = account.ActivationToken;
 
             db.User.Add(user);
 
@@ -175,11 +174,33 @@ namespace DataManagement.Repositories
 
         }
 
+        public ServiceCallResultModel ActivateAccount(string activationToken)
+        {
+            if (string.IsNullOrEmpty(activationToken))
+                return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Invalid parameters" };
+
+            var user = (from r in db.User
+                        where r.ActivationToken == activationToken
+                        select r).FirstOrDefault();
+
+            if (user == null)
+                return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Token not valid" };
+
+            user.IsActivated = true;
+
+            if (SaveChanges(db))
+            {
+                return new ServiceCallResultModel() { bSuccessful = true };
+            }
+
+            return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Failed to update database. Please try again" };
+        }
+
         public void Dispose()
         {
             db.Dispose();
         }
 
-       
+        
     }
 }

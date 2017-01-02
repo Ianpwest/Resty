@@ -19,5 +19,7 @@ namespace DataManagement.Models
         public string Token { get; set; }
 
         public string Email { get; set; }
+
+        public string ActivationToken { get; set; }
     }
 }

@@ -58,6 +58,7 @@ namespace Resty.Utilities
         {
             account.Salt = GetSalt();
             account.Password = Encrypt(account.Salt + account.Password);
+            account.ActivationToken = GenerateToken();
 
             using (IAccountRepository repo = new AccountRepository())
             {
@@ -71,6 +72,9 @@ namespace Resty.Utilities
                 {
                     return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Cannot contact database at this time. Please try again." };
                 }
+
+                if (!SendActivationEmail(account.Email, account.ActivationToken))
+                    return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Failed to send activation email" };
 
                 return new ServiceCallResultModel() { bSuccessful = true };
             }
@@ -106,6 +110,14 @@ namespace Resty.Utilities
             return new ServiceCallResultModel() { bSuccessful = true };
         }
 
+        internal static ServiceCallResultModel ActivateAccount(string activationToken)
+        {
+            using (IAccountRepository repo = new AccountRepository())
+            {
+                return repo.ActivateAccount(activationToken);
+            }
+        }
+
         internal static ServiceCallResultModel ResetPassword(ResetPasswordModel resetPasswordModel)
         {
             if (resetPasswordModel == null)
@@ -135,6 +147,37 @@ namespace Resty.Utilities
             {
                 return repo.ValidateTokenExists(token);
             }
+        }
+
+        private static bool SendActivationEmail(string email, string activationToken)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(activationToken))
+                return false;
+
+            // Create the email object first, then add the properties.
+            var myMessage = new SendGridMessage();
+
+            // Add the message properties.
+            myMessage.From = new MailAddress("AccountActivation@WithU.com");
+
+            myMessage.AddTo(email);
+
+            myMessage.Subject = "Account activation";
+
+            //Add the HTML and Text bodies
+            myMessage.Html = "<h4>Welcome to WithU! Please activate your account by clicking the link below</h4><br/><br/>";
+            myMessage.Html += "<p>Activation Link: </p><a>https://resty.azurewebsites.net/Activation/ActivateAccount?activationToken=" + activationToken;
+
+            // Create credentials, specifying your user name and password.
+            var credentials = new NetworkCredential("azure_d6838b6e2dbb20423623ce113e70b114@azure.com", "Snowheyoh1");
+
+            // Create an Web transport for sending email.
+            var transportWeb = new Web(credentials);
+
+            // Send the email, which returns an awaitable task.
+            transportWeb.DeliverAsync(myMessage);
+
+            return true;
         }
 
         private static bool SendResetPasswordEmail(string email, string resetToken)
