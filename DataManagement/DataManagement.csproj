@@ -76,6 +76,7 @@
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\LogOnResultModel.cs" />
+    <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\ServiceCallResultModel.cs" />
     <Compile Include="Repositories\AccountRepository.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />

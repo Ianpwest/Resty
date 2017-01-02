@@ -115,11 +115,71 @@ namespace DataManagement.Repositories
 
         }
 
+        public bool ValidateEmailExists(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+                return false;
+
+            var user = (from r in db.User
+                        where r.EmailAddress == email
+                        select r).FirstOrDefault();
+
+            if (user == null)
+                return false;
+
+            return true;
+        }
+
+        public bool UpdateUsersResetPasswordToken(string email, string resetToken)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(resetToken))
+                return false;
+
+            var user = (from r in db.User
+                        where r.EmailAddress == email
+                        select r).FirstOrDefault();
+
+            if (user == null)
+                return false;
+
+            user.ResetPasswordToken = resetToken;
+
+            return SaveChanges(db);
+        }
+
+        public ServiceCallResultModel ResetPassword(ResetPasswordModel resetPasswordModel)
+        {
+            if (resetPasswordModel == null)
+                return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Invalid parameter" };
+
+            var user = (from r in db.User
+                        where r.EmailAddress == resetPasswordModel.Email
+                        && r.ResetPasswordToken == resetPasswordModel.ResetToken
+                        select r).FirstOrDefault();
+
+            if (user == null)
+                return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Invalid code. Please try again." };
+
+            user.ResetPasswordToken = null;
+            user.Password = resetPasswordModel.Password;
+            user.Salt = resetPasswordModel.Salt;
+
+            if(SaveChanges(db))
+            {
+                return new ServiceCallResultModel() { bSuccessful = true};
+            }
+            else
+            {
+                return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Unable to update database. Please try again." };
+            }
+
+        }
+
         public void Dispose()
         {
             db.Dispose();
         }
 
-        
+       
     }
 }

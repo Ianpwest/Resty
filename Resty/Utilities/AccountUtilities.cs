@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net;
+using System.Net.Mail;
+using SendGrid;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -20,7 +23,7 @@ namespace Resty.Utilities
                 string strSaltResult = repo.GetSaltForUser(model.Email);
 
                 if(strSaltResult == null)
-                    return new LogOnResultModel() { bSuccessful = false, FailureReason = "User password salt not found" };
+                    return new LogOnResultModel() { bSuccessful = false, FailureReason = "Account not found. Please try again." };
 
                 //Get the hash for this user given what they typed for their password and their salt
                 string strHashToCheck = GetHashPassword(model.Password, strSaltResult);
@@ -73,6 +76,51 @@ namespace Resty.Utilities
             }
         }
 
+        internal static ServiceCallResultModel GetResetPasswordTokenForUser(string email)
+        {
+            using (IAccountRepository repo = new AccountRepository())
+            {
+                if(!repo.ValidateEmailExists(email))
+                {
+                    return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Email not found" };
+                }
+            }
+
+            var resetToken = GenerateToken().Substring(0, 5);
+
+            //Store the reset token against the user.
+            using (IAccountRepository repo = new AccountRepository())
+            {
+                if (!repo.UpdateUsersResetPasswordToken(email, resetToken))
+                {
+                    return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Failure. Please try again." };
+                }
+            }
+
+            //Send the reset password email
+            if (!SendResetPasswordEmail(email, resetToken))
+            {
+                return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Failed to send email. Please try again." };
+            }
+
+            return new ServiceCallResultModel() { bSuccessful = true };
+        }
+
+        internal static ServiceCallResultModel ResetPassword(ResetPasswordModel resetPasswordModel)
+        {
+            if (resetPasswordModel == null)
+                return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Failed. Please try again." };
+
+            resetPasswordModel.Salt = GetSalt();
+            resetPasswordModel.Password = Encrypt(resetPasswordModel.Salt + resetPasswordModel.Password);
+
+            ServiceCallResultModel result = new ServiceCallResultModel();
+            using (IAccountRepository repo = new AccountRepository())
+            {
+               return repo.ResetPassword(resetPasswordModel);
+            }
+        }
+
         internal static string GetUserNameFromToken(string token)
         {
             using (IAccountRepository repo = new AccountRepository())
@@ -87,6 +135,36 @@ namespace Resty.Utilities
             {
                 return repo.ValidateTokenExists(token);
             }
+        }
+
+        private static bool SendResetPasswordEmail(string email, string resetToken)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(resetToken))
+                return false;
+
+            // Create the email object first, then add the properties.
+            var myMessage = new SendGridMessage();
+
+            // Add the message properties.
+            myMessage.From = new MailAddress("PasswordReset@WithU.com");
+
+            myMessage.AddTo(email);
+
+            myMessage.Subject = "Password Reset Token: " + resetToken;
+
+            //Add the HTML and Text bodies
+            myMessage.Text = "Password reset token: " + resetToken;
+
+            // Create credentials, specifying your user name and password.
+            var credentials = new NetworkCredential("azure_d6838b6e2dbb20423623ce113e70b114@azure.com", "Snowheyoh1");
+
+            // Create an Web transport for sending email.
+            var transportWeb = new Web(credentials);
+
+            // Send the email, which returns an awaitable task.
+            transportWeb.DeliverAsync(myMessage);
+
+            return true;
         }
 
         private static string GenerateToken()

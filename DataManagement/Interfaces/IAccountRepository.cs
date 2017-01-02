@@ -22,5 +22,8 @@ namespace DataManagement.Interfaces
         string GetEmailFromToken(string token);
         string GetSaltForUser(string email);
         bool RegisterAccount(AccountModel account);
+        bool ValidateEmailExists(string email);
+        bool UpdateUsersResetPasswordToken(string email, string resetToken);
+        ServiceCallResultModel ResetPassword(ResetPasswordModel resetPasswordModel);
     }
 }
