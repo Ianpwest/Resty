@@ -79,6 +79,9 @@
     <Compile Include="Models\ServiceCallResultModel.cs" />
     <Compile Include="Repositories\AccountRepository.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
+    <Compile Include="Table.cs">
+      <DependentUpon>WithUDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="User.cs">
       <DependentUpon>WithUDB.tt</DependentUpon>
     </Compile>

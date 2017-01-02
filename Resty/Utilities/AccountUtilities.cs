@@ -17,7 +17,7 @@ namespace Resty.Utilities
             using (IAccountRepository repo = new AccountRepository())
             {
                 //Get the salt for this user
-                string strSaltResult = repo.GetSaltForUser(model.Username);
+                string strSaltResult = repo.GetSaltForUser(model.Email);
 
                 if(strSaltResult == null)
                     return new LogOnResultModel() { bSuccessful = false, FailureReason = "User password salt not found" };
@@ -37,7 +37,7 @@ namespace Resty.Utilities
                     returnModel.Token = AccountUtilities.GenerateToken();
 
                     //Store Token for user
-                    if(repo.UpdateUserToken(model.Username, returnModel.Token))
+                    if(repo.UpdateUserToken(model.Email, returnModel.Token))
                     {
                         return returnModel;
                     }
@@ -59,9 +59,9 @@ namespace Resty.Utilities
             using (IAccountRepository repo = new AccountRepository())
             {
                 //Verify username not already in use
-                if (!repo.IsUsernameUnique(account.Username))
+                if (!repo.IsEmailUnique(account.Email))
                 {
-                    return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Username already exists. Please enter another." };
+                    return new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Email already exists. Please enter another." };
                 }
 
                 if(!repo.RegisterAccount(account))
@@ -77,7 +77,7 @@ namespace Resty.Utilities
         {
             using (IAccountRepository repo = new AccountRepository())
             {
-                return repo.GetUserNameFromToken(token);
+                return repo.GetEmailFromToken(token);
             }
         }
 

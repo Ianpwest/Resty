@@ -45,6 +45,5 @@ namespace DataManagement
         public virtual lst_City lst_City { get; set; }
         public virtual lst_Cost lst_Cost { get; set; }
         public virtual lst_State lst_State { get; set; }
-        public virtual User User { get; set; }
     }
 }

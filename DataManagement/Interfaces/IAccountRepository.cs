@@ -9,18 +9,18 @@ namespace DataManagement.Interfaces
 {
     public interface IAccountRepository : IDisposable
     {
-        bool IsUsernameUnique(string username);
+        bool IsEmailUnique(string email);
 
         bool AddUser(AccountModel accountModel);
 
         LogOnResultModel ValidateUserLogOn(LogOnModel model);
 
-        bool UpdateUserToken(string username, string token);
+        bool UpdateUserToken(string email, string token);
 
         bool ValidateTokenExists(string token);
 
-        string GetUserNameFromToken(string token);
-        string GetSaltForUser(string username);
+        string GetEmailFromToken(string token);
+        string GetSaltForUser(string email);
         bool RegisterAccount(AccountModel account);
     }
 }

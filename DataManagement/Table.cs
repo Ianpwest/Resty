@@ -12,15 +12,8 @@ namespace DataManagement
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class Table
     {
-        public string EmailAddress { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public System.DateTime DateCreated { get; set; }
-        public string Password { get; set; }
-        public string Salt { get; set; }
-        public string Token { get; set; }
-        public string ResetPasswordToken { get; set; }
+        public int Id { get; set; }
     }
 }

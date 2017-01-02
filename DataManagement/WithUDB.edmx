@@ -70,14 +70,19 @@
           </Key>
           <Property Name="StateId" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="Table">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
-            <PropertyRef Name="UserId" />
+            <PropertyRef Name="EmailAddress" />
           </Key>
-          <Property Name="UserId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EmailAddress" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="EmailAddress" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="DateCreated" Type="datetime" Nullable="false" />
           <Property Name="Password" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Salt" Type="varchar" MaxLength="50" Nullable="false" />
@@ -156,18 +161,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Activity_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Activity" Type="Self.Activity" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="Activity">
-              <PropertyRef Name="CreatedById" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_lstCity_lstState">
           <End Role="lst_State" Type="Self.lst_State" Multiplicity="1" />
           <End Role="lst_City" Type="Self.lst_City" Multiplicity="*" />
@@ -188,6 +181,7 @@
           <EntitySet Name="lst_City" EntityType="Self.lst_City" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="lst_Cost" EntityType="Self.lst_Cost" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="lst_State" EntityType="Self.lst_State" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Table" EntityType="Self.Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Activity_File_Activity" Association="Self.FK_Activity_File_Activity">
             <End Role="Activity" EntitySet="Activity" />
@@ -213,10 +207,6 @@
             <End Role="lst_State" EntitySet="lst_State" />
             <End Role="Activity" EntitySet="Activity" />
           </AssociationSet>
-          <AssociationSet Name="FK_Activity_User" Association="Self.FK_Activity_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="Activity" EntitySet="Activity" />
-          </AssociationSet>
           <AssociationSet Name="FK_lstCity_lstState" Association="Self.FK_lstCity_lstState">
             <End Role="lst_State" EntitySet="lst_State" />
             <End Role="lst_City" EntitySet="lst_City" />
@@ -234,6 +224,7 @@
           <EntitySet Name="lst_City" EntityType="WithUDBModel.lst_City" />
           <EntitySet Name="lst_Cost" EntityType="WithUDBModel.lst_Cost" />
           <EntitySet Name="lst_State" EntityType="WithUDBModel.lst_State" />
+          <EntitySet Name="Table" EntityType="WithUDBModel.Table" />
           <EntitySet Name="User" EntityType="WithUDBModel.User" />
           <AssociationSet Name="FK_Activity_File_Activity" Association="WithUDBModel.FK_Activity_File_Activity">
             <End Role="Activity" EntitySet="Activity" />
@@ -253,10 +244,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_Activity_lst_State" Association="WithUDBModel.FK_Activity_lst_State">
             <End Role="lst_State" EntitySet="lst_State" />
-            <End Role="Activity" EntitySet="Activity" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Activity_User" Association="WithUDBModel.FK_Activity_User">
-            <End Role="User" EntitySet="User" />
             <End Role="Activity" EntitySet="Activity" />
           </AssociationSet>
           <AssociationSet Name="FK_Activity_File_File" Association="WithUDBModel.FK_Activity_File_File">
@@ -295,7 +282,6 @@
           <NavigationProperty Name="lst_City" Relationship="WithUDBModel.FK_Activity_lst_City" FromRole="Activity" ToRole="lst_City" />
           <NavigationProperty Name="lst_Cost" Relationship="WithUDBModel.FK_Activity_lst_Cost" FromRole="Activity" ToRole="lst_Cost" />
           <NavigationProperty Name="lst_State" Relationship="WithUDBModel.FK_Activity_lst_State" FromRole="Activity" ToRole="lst_State" />
-          <NavigationProperty Name="User" Relationship="WithUDBModel.FK_Activity_User" FromRole="Activity" ToRole="User" />
         </EntityType>
         <EntityType Name="Activity_File">
           <Key>
@@ -348,20 +334,24 @@
           <NavigationProperty Name="Activity" Relationship="WithUDBModel.FK_Activity_lst_State" FromRole="lst_State" ToRole="Activity" />
           <NavigationProperty Name="lst_City" Relationship="WithUDBModel.FK_lstCity_lstState" FromRole="lst_State" ToRole="lst_City" />
         </EntityType>
+        <EntityType Name="Table">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
-            <PropertyRef Name="UserId" />
+            <PropertyRef Name="EmailAddress" />
           </Key>
-          <Property Name="UserId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmailAddress" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="EmailAddress" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Password" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Salt" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Token" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ResetPasswordToken" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Activity" Relationship="WithUDBModel.FK_Activity_User" FromRole="User" ToRole="Activity" />
         </EntityType>
         <Association Name="FK_Activity_File_Activity">
           <End Type="WithUDBModel.Activity" Role="Activity" Multiplicity="1" />
@@ -420,18 +410,6 @@
             </Principal>
             <Dependent Role="Activity">
               <PropertyRef Name="StateId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Activity_User">
-          <End Type="WithUDBModel.User" Role="User" Multiplicity="1" />
-          <End Type="WithUDBModel.Activity" Role="Activity" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="Activity">
-              <PropertyRef Name="CreatedById" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -537,6 +515,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Table">
+            <EntityTypeMapping TypeName="WithUDBModel.Table">
+              <MappingFragment StoreEntitySet="Table">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="User">
             <EntityTypeMapping TypeName="WithUDBModel.User">
               <MappingFragment StoreEntitySet="User">
@@ -545,10 +530,9 @@
                 <ScalarProperty Name="Salt" ColumnName="Salt" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

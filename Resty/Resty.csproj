@@ -177,7 +177,6 @@
     <Compile Include="Authorization\AuthenticateTokenAttribute.cs" />
     <Compile Include="Authorization\IMyPrincipal.cs" />
     <Compile Include="Authorization\MyPrincipal.cs" />
-    <Compile Include="Authorization\TokenManager.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Global.asax.cs">

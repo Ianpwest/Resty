@@ -22,13 +22,13 @@ namespace DataManagement.Repositories
             throw new NotImplementedException();
         }
 
-        public bool IsUsernameUnique(string username)
+        public bool IsEmailUnique(string email)
         {
-            if (string.IsNullOrEmpty(username))
+            if (string.IsNullOrEmpty(email))
                 return false;
 
             var user = (from r in db.User
-                        where r.UserId == username
+                        where r.EmailAddress == email
                         select r).FirstOrDefault();
 
             //No user found
@@ -41,7 +41,7 @@ namespace DataManagement.Repositories
         public LogOnResultModel ValidateUserLogOn(LogOnModel model)
         {
             var user = (from r in db.User
-                        where r.UserId == model.Username
+                        where r.EmailAddress == model.Email
                         && r.Password == model.Password
                         select r).FirstOrDefault();
 
@@ -51,11 +51,11 @@ namespace DataManagement.Repositories
             return new LogOnResultModel() { bSuccessful = true, FirstName = user.FirstName, LastName = user.LastName };
         }
 
-        public bool UpdateUserToken(string username, string token)
+        public bool UpdateUserToken(string email, string token)
         {
             var user = (from r in db.User
-                       where r.UserId == username
-                       select r).FirstOrDefault();
+                       where r.EmailAddress == email
+                        select r).FirstOrDefault();
 
             if (user == null)
                 return false;
@@ -77,19 +77,19 @@ namespace DataManagement.Repositories
             return true;
         }
 
-        public string GetUserNameFromToken(string token)
+        public string GetEmailFromToken(string token)
         {
-            var userName = (from r in db.User
+            var emailAddress = (from r in db.User
                             where r.Token == token
-                            select r.UserId).FirstOrDefault();
+                            select r.EmailAddress).FirstOrDefault();
 
-            return userName;
+            return emailAddress;
         }
 
-        public string GetSaltForUser(string username)
+        public string GetSaltForUser(string email)
         {
             var salt = (from r in db.User
-                        where r.UserId == username
+                        where r.EmailAddress == email
                         select r.Salt).FirstOrDefault();
 
             return salt;
@@ -108,7 +108,6 @@ namespace DataManagement.Repositories
             user.Salt = account.Salt;
             user.EmailAddress = account.Email;
             user.DateCreated = DateTime.Now;
-            user.UserId = account.Username;
 
             db.User.Add(user);
 

@@ -32,6 +32,7 @@ namespace DataManagement
         public virtual DbSet<lst_City> lst_City { get; set; }
         public virtual DbSet<lst_Cost> lst_Cost { get; set; }
         public virtual DbSet<lst_State> lst_State { get; set; }
+        public virtual DbSet<Table> Table { get; set; }
         public virtual DbSet<User> User { get; set; }
     }
 }
