@@ -87,6 +87,25 @@ namespace Resty.Controllers
             return Ok(new ServiceCallResultModel() { bSuccessful = true });
         }
 
+        [HttpPost]
+        [AuthenticateTokenAttribute]
+        public IHttpActionResult UpdateProfileInformation([FromBody]AccountModel account)
+        {
+            if(account == null)
+                return Content(System.Net.HttpStatusCode.BadRequest, new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Request not formatted correctly." });
+
+            LogOnResultModel logOnResultModel = AccountUtilities.UpdateProfileInformation(account);
+
+            if (logOnResultModel.bSuccessful)
+            {
+                return Ok(logOnResultModel);
+            }
+            else
+            {
+                return Content(System.Net.HttpStatusCode.Forbidden, new ServiceCallResultModel() { bSuccessful = false, FailureReason = logOnResultModel.FailureReason });
+            }
+        }
+
         [HttpGet]
         [AuthenticateTokenAttribute]
         public IHttpActionResult GetYourName()

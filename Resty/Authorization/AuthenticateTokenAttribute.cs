@@ -8,6 +8,12 @@ namespace Resty.Authorization
     {
         public override void OnAuthorization(System.Web.Http.Controllers.HttpActionContext actionContext)
         {
+            if(actionContext.Request.Headers.Authorization == null)
+            {
+                actionContext.Response = new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.Forbidden);
+                return;
+            }
+
             if(actionContext.Request.Headers.Authorization.Parameter == null)
             {
                 actionContext.Response = new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.Forbidden);

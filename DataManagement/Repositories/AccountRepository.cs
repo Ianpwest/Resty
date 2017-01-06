@@ -208,10 +208,34 @@ namespace DataManagement.Repositories
             return user.ActivationToken;
         }
 
+        public LogOnResultModel UpdateProfileInformation(AccountModel account)
+        {
+            if (account == null)
+                return new LogOnResultModel() { bSuccessful = false, FailureReason = "Argument null" };
+
+            var user = (from r in db.User
+                        where r.EmailAddress == account.Email
+                        select r).FirstOrDefault();
+
+            if(user == null)
+                return new LogOnResultModel() { bSuccessful = false, FailureReason = "User not found" };
+
+            user.LastName = account.LastName;
+            user.FirstName = account.FirstName;
+
+            if(!SaveChanges(db))
+            {
+                return new LogOnResultModel() { bSuccessful = false, FailureReason = "Unable to update database" };
+            }
+
+            return new LogOnResultModel() { bSuccessful = true, FirstName = account.FirstName, LastName = account.LastName, Token = user.Token };
+        }
+
         public void Dispose()
         {
             db.Dispose();
         }
-        
+
+       
     }
 }

@@ -18,14 +18,17 @@ namespace DataManagement
         public File()
         {
             this.Activity_File = new HashSet<Activity_File>();
+            this.User_File = new HashSet<User_File>();
         }
     
         public System.Guid FileId { get; set; }
         public string Name { get; set; }
-        public string Extension { get; set; }
-        public string Path { get; set; }
+        public string ContentType { get; set; }
+        public string Container { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Activity_File> Activity_File { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<User_File> User_File { get; set; }
     }
 }

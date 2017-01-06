@@ -110,6 +110,14 @@ namespace Resty.Utilities
             return new ServiceCallResultModel() { bSuccessful = true };
         }
 
+        internal static LogOnResultModel UpdateProfileInformation(AccountModel account)
+        {
+            using (IAccountRepository repo = new AccountRepository())
+            {
+                return repo.UpdateProfileInformation(account);
+            }
+        }
+
         internal static void ResendActivationEmail(string email)
         {
             string activationToken;

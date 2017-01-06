@@ -42,8 +42,8 @@
           </Key>
           <Property Name="FileId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="Extension" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Path" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ContentType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Container" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="lst_Category">
           <Key>
@@ -90,6 +90,15 @@
           <Property Name="ResetPasswordToken" Type="varchar" MaxLength="50" />
           <Property Name="IsActivated" Type="bit" Nullable="false" />
           <Property Name="ActivationToken" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="User_File">
+          <Key>
+            <PropertyRef Name="UserFileId" />
+          </Key>
+          <Property Name="UserFileId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FileId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="IsProfile" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_Activity_File_Activity">
           <End Role="Activity" Type="Self.Activity" Multiplicity="1" />
@@ -175,6 +184,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_User_File_File">
+          <End Role="File" Type="Self.File" Multiplicity="1" />
+          <End Role="User_File" Type="Self.User_File" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="File">
+              <PropertyRef Name="FileId" />
+            </Principal>
+            <Dependent Role="User_File">
+              <PropertyRef Name="FileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_File_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User_File" Type="Self.User_File" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="EmailAddress" />
+            </Principal>
+            <Dependent Role="User_File">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="WithUDBModelStoreContainer">
           <EntitySet Name="Activity" EntityType="Self.Activity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Activity_File" EntityType="Self.Activity_File" Schema="dbo" store:Type="Tables" />
@@ -185,6 +218,7 @@
           <EntitySet Name="lst_State" EntityType="Self.lst_State" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Table" EntityType="Self.Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_File" EntityType="Self.User_File" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Activity_File_Activity" Association="Self.FK_Activity_File_Activity">
             <End Role="Activity" EntitySet="Activity" />
             <End Role="Activity_File" EntitySet="Activity_File" />
@@ -213,6 +247,14 @@
             <End Role="lst_State" EntitySet="lst_State" />
             <End Role="lst_City" EntitySet="lst_City" />
           </AssociationSet>
+          <AssociationSet Name="FK_User_File_File" Association="Self.FK_User_File_File">
+            <End Role="File" EntitySet="File" />
+            <End Role="User_File" EntitySet="User_File" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_File_User" Association="Self.FK_User_File_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="User_File" EntitySet="User_File" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -228,6 +270,7 @@
           <EntitySet Name="lst_State" EntityType="WithUDBModel.lst_State" />
           <EntitySet Name="Table" EntityType="WithUDBModel.Table" />
           <EntitySet Name="User" EntityType="WithUDBModel.User" />
+          <EntitySet Name="User_File" EntityType="WithUDBModel.User_File" />
           <AssociationSet Name="FK_Activity_File_Activity" Association="WithUDBModel.FK_Activity_File_Activity">
             <End Role="Activity" EntitySet="Activity" />
             <End Role="Activity_File" EntitySet="Activity_File" />
@@ -252,9 +295,17 @@
             <End Role="File" EntitySet="File" />
             <End Role="Activity_File" EntitySet="Activity_File" />
           </AssociationSet>
+          <AssociationSet Name="FK_User_File_File" Association="WithUDBModel.FK_User_File_File">
+            <End Role="File" EntitySet="File" />
+            <End Role="User_File" EntitySet="User_File" />
+          </AssociationSet>
           <AssociationSet Name="FK_lstCity_lstState" Association="WithUDBModel.FK_lstCity_lstState">
             <End Role="lst_State" EntitySet="lst_State" />
             <End Role="lst_City" EntitySet="lst_City" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_File_User" Association="WithUDBModel.FK_User_File_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="User_File" EntitySet="User_File" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Activity">
@@ -301,9 +352,10 @@
           </Key>
           <Property Name="FileId" Type="Guid" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Extension" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Path" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ContentType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Container" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Activity_File" Relationship="WithUDBModel.FK_Activity_File_File" FromRole="File" ToRole="Activity_File" />
+          <NavigationProperty Name="User_File" Relationship="WithUDBModel.FK_User_File_File" FromRole="File" ToRole="User_File" />
         </EntityType>
         <EntityType Name="lst_Category">
           <Key>
@@ -356,6 +408,18 @@
           <Property Name="ResetPasswordToken" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IsActivated" Type="Boolean" Nullable="false" />
           <Property Name="ActivationToken" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="User_File" Relationship="WithUDBModel.FK_User_File_User" FromRole="User" ToRole="User_File" />
+        </EntityType>
+        <EntityType Name="User_File">
+          <Key>
+            <PropertyRef Name="UserFileId" />
+          </Key>
+          <Property Name="UserFileId" Type="Guid" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FileId" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="File" Relationship="WithUDBModel.FK_User_File_File" FromRole="User_File" ToRole="File" />
+          <NavigationProperty Name="User" Relationship="WithUDBModel.FK_User_File_User" FromRole="User_File" ToRole="User" />
+          <Property Name="IsProfile" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_Activity_File_Activity">
           <End Type="WithUDBModel.Activity" Role="Activity" Multiplicity="1" />
@@ -429,6 +493,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_User_File_File">
+          <End Type="WithUDBModel.File" Role="File" Multiplicity="1" />
+          <End Type="WithUDBModel.User_File" Role="User_File" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="File">
+              <PropertyRef Name="FileId" />
+            </Principal>
+            <Dependent Role="User_File">
+              <PropertyRef Name="FileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_lstCity_lstState">
           <End Type="WithUDBModel.lst_State" Role="lst_State" Multiplicity="1" />
           <End Type="WithUDBModel.lst_City" Role="lst_City" Multiplicity="*" />
@@ -438,6 +514,18 @@
             </Principal>
             <Dependent Role="lst_City">
               <PropertyRef Name="StateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_File_User">
+          <End Type="WithUDBModel.User" Role="User" Multiplicity="1" />
+          <End Type="WithUDBModel.User_File" Role="User_File" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="EmailAddress" />
+            </Principal>
+            <Dependent Role="User_File">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -483,8 +571,8 @@
           <EntitySetMapping Name="File">
             <EntityTypeMapping TypeName="WithUDBModel.File">
               <MappingFragment StoreEntitySet="File">
-                <ScalarProperty Name="Path" ColumnName="Path" />
-                <ScalarProperty Name="Extension" ColumnName="Extension" />
+                <ScalarProperty Name="Container" ColumnName="Container" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="FileId" ColumnName="FileId" />
               </MappingFragment>
@@ -539,6 +627,16 @@
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_File">
+            <EntityTypeMapping TypeName="WithUDBModel.User_File">
+              <MappingFragment StoreEntitySet="User_File">
+                <ScalarProperty Name="IsProfile" ColumnName="IsProfile" />
+                <ScalarProperty Name="FileId" ColumnName="FileId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserFileId" ColumnName="UserFileId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

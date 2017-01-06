@@ -34,5 +34,6 @@ namespace DataManagement
         public virtual DbSet<lst_State> lst_State { get; set; }
         public virtual DbSet<Table> Table { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<User_File> User_File { get; set; }
     }
 }

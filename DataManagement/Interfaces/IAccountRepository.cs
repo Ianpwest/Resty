@@ -25,5 +25,6 @@ namespace DataManagement.Interfaces
         ServiceCallResultModel ResetPassword(ResetPasswordModel resetPasswordModel);
         ServiceCallResultModel ActivateAccount(string activationToken);
         string GetActivationTokenForUser(string email);
+        LogOnResultModel UpdateProfileInformation(AccountModel account);
     }
 }
