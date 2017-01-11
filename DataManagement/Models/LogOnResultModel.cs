@@ -17,5 +17,7 @@ namespace DataManagement.Models
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public string ProfileURI { get; set; }
     }
 }

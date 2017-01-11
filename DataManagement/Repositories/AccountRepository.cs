@@ -236,6 +236,16 @@ namespace DataManagement.Repositories
             db.Dispose();
         }
 
-       
+        public string GetUsersProfileImageFileName(string email)
+        {
+            var user = (from r in db.User_File
+                        where r.UserId == email
+                        select r).FirstOrDefault();
+
+            if (user == null)
+                return string.Empty;
+
+            return user.FileId + Constants.Constants.PROFILE_IMAGE_SUFFIX;
+        }
     }
 }

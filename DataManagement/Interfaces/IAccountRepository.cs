@@ -26,5 +26,6 @@ namespace DataManagement.Interfaces
         ServiceCallResultModel ActivateAccount(string activationToken);
         string GetActivationTokenForUser(string email);
         LogOnResultModel UpdateProfileInformation(AccountModel account);
+        string GetUsersProfileImageFileName(string email);
     }
 }

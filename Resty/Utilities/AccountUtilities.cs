@@ -33,12 +33,15 @@ namespace Resty.Utilities
 
                 //Validate the user
                 LogOnResultModel returnModel = repo.ValidateUserLogOn(model);
-
+                
                 //If successfully validated generate new token for user
                 if(returnModel.bSuccessful)
                 {
-                    returnModel.Token = AccountUtilities.GenerateToken();
+                    //Get the users profile image URI
+                    returnModel.ProfileURI = GetUsersProfileImageURI(model.Email);
 
+                    returnModel.Token = AccountUtilities.GenerateToken();
+                    
                     //Store Token for user
                     if(repo.UpdateUserToken(model.Email, returnModel.Token))
                     {
@@ -53,7 +56,7 @@ namespace Resty.Utilities
                 return returnModel;
             }
         }
-
+        
         internal static ServiceCallResultModel RegisterAccount(AccountModel account)
         {
             account.Salt = GetSalt();
@@ -161,12 +164,31 @@ namespace Resty.Utilities
             }
         }
 
+
+
         internal static bool ValidateTokenExists(string token)
         {
             using (IAccountRepository repo = new AccountRepository())
             {
                 return repo.ValidateTokenExists(token);
             }
+        }
+
+        internal static string GetUsersProfileImageURI(string email)
+        {
+            string fileName = string.Empty;
+            using (IAccountRepository repo = new AccountRepository())
+            {
+                fileName = repo.GetUsersProfileImageFileName(email);
+            }
+
+            string URI = string.Empty;
+            using (IImageRepository repo2 = new ImageRepository())
+            {
+                URI = repo2.GetImageSASLongExpirationURI(fileName);
+            }
+
+            return URI;
         }
 
         private static bool SendActivationEmail(string email, string activationToken)

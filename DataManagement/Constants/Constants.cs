@@ -9,6 +9,7 @@ namespace DataManagement.Constants
     public class Constants
     {
         public const string CONTAINER_IMAGES = "images";
+        public const string PROFILE_IMAGE_SUFFIX = "profilePicture";
 
         public const int LONG_SAS_DURATION = 7884000; // 30 Years in minutes
         public const int SHORT_SAS_DURATION = 15; //15 Minutes
