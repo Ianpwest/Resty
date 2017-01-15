@@ -240,6 +240,7 @@ namespace DataManagement.Repositories
         {
             var user = (from r in db.User_File
                         where r.UserId == email
+                        && r.IsProfile == true
                         select r).FirstOrDefault();
 
             if (user == null)
