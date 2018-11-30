@@ -10,7 +10,7 @@ namespace Resty.Controllers
         {
             //Do some stuff here to check service health
 
-            return Ok(new StatusModel() { Status = "Service running. No issues. Hi Ian!" });
+            return Ok(new StatusModel() { Status = "Service running. No issues. Hi!" });
 
         }
     }
