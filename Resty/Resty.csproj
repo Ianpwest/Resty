@@ -251,6 +251,8 @@
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Metadata\deploymentTemplates\apiappconfig.azureresource.json" />
     <Content Include="apiapp.json" />
+    <None Include="Properties\PublishProfiles\clptracker - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\clptracker - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Resty - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\Resty - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
