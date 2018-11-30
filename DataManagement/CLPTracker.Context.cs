@@ -13,10 +13,10 @@ namespace DataManagement
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class WithUDBEntities : DbContext
+    public partial class CLPTrackerEntities : DbContext
     {
-        public WithUDBEntities()
-            : base("name=WithUDBEntities")
+        public CLPTrackerEntities()
+            : base("name=CLPTrackerEntities")
         {
         }
     
@@ -25,15 +25,6 @@ namespace DataManagement
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Activity> Activity { get; set; }
-        public virtual DbSet<Activity_File> Activity_File { get; set; }
-        public virtual DbSet<File> File { get; set; }
-        public virtual DbSet<lst_Category> lst_Category { get; set; }
-        public virtual DbSet<lst_City> lst_City { get; set; }
-        public virtual DbSet<lst_Cost> lst_Cost { get; set; }
-        public virtual DbSet<lst_State> lst_State { get; set; }
-        public virtual DbSet<Table> Table { get; set; }
         public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<User_File> User_File { get; set; }
     }
 }

@@ -83,32 +83,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Activity.cs">
-      <DependentUpon>WithUDB.tt</DependentUpon>
+    <Compile Include="CLPTracker.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CLPTracker.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Activity_File.cs">
-      <DependentUpon>WithUDB.tt</DependentUpon>
+    <Compile Include="CLPTracker.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CLPTracker.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CLPTracker.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CLPTracker.edmx</DependentUpon>
     </Compile>
     <Compile Include="Constants\Constants.cs" />
-    <Compile Include="File.cs">
-      <DependentUpon>WithUDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="Interfaces\IAccountRepository.cs" />
     <Compile Include="Interfaces\IImageRepository.cs" />
-    <Compile Include="lst_Category.cs">
-      <DependentUpon>WithUDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="lst_City.cs">
-      <DependentUpon>WithUDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="lst_Cost.cs">
-      <DependentUpon>WithUDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="lst_State.cs">
-      <DependentUpon>WithUDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\AccountModel.cs" />
-    <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\LogOnResultModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
@@ -116,64 +109,39 @@
     <Compile Include="Models\ServiceCallResultModel.cs" />
     <Compile Include="Repositories\AccountRepository.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
-    <Compile Include="Repositories\ImageRepository.cs" />
-    <Compile Include="Table.cs">
-      <DependentUpon>WithUDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="User.cs">
-      <DependentUpon>WithUDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="User_File.cs">
-      <DependentUpon>WithUDB.tt</DependentUpon>
+      <DependentUpon>CLPTracker.tt</DependentUpon>
     </Compile>
     <Compile Include="Utilities\ImageUtilities.cs" />
     <Compile Include="Utilities\PasswordUtilities.cs" />
-    <Compile Include="WithUDB.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>WithUDB.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="WithUDB.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>WithUDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="WithUDB.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>WithUDB.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="WithUDB.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>WithUDB.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.Config" />
-    <None Include="WithUDB.edmx.diagram">
-      <DependentUpon>WithUDB.edmx</DependentUpon>
+    <EntityDeploy Include="CLPTracker.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CLPTracker.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="CLPTracker.edmx.diagram">
+      <DependentUpon>CLPTracker.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="WithUDB.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>WithUDB.edmx</DependentUpon>
-      <LastGenOutput>WithUDB.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="WithUDB.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>WithUDB.edmx</DependentUpon>
-      <LastGenOutput>WithUDB.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="CLPTracker.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CLPTracker.edmx</DependentUpon>
+      <LastGenOutput>CLPTracker.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="CLPTracker.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CLPTracker.edmx</DependentUpon>
+      <LastGenOutput>CLPTracker.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

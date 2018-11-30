@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataManagement.Repositories
 {
@@ -18,13 +14,13 @@ namespace DataManagement.Repositories
             {
                 db.SaveChanges();
             }
-            catch (DbEntityValidationException ex)
+            catch (DbEntityValidationException)
             {
                 //     The save was aborted because validation of entity property values failed.
 
                 bSuccess = false;
             }
-            catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException ex)
+            catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException)
             {
                 //     A database command did not affect the expected number of rows. This usually
                 //     indicates an optimistic concurrency violation; that is, a row has been changed
@@ -32,7 +28,7 @@ namespace DataManagement.Repositories
 
                 bSuccess = false;
             }
-            catch (System.Data.Entity.Infrastructure.DbUpdateException ex)
+            catch (System.Data.Entity.Infrastructure.DbUpdateException)
             {
                 //     An error occurred sending updates to the database.
                 
@@ -45,19 +41,19 @@ namespace DataManagement.Repositories
                 
                 bSuccess = false;
             }
-            catch (System.ObjectDisposedException ex)
+            catch (System.ObjectDisposedException)
             {
                 //     The context or connection have been disposed.
                 bSuccess = false;
             }
-            catch (System.InvalidOperationException ex)
+            catch (System.InvalidOperationException)
             {
                 //     Some error occurred attempting to process entities in the context either
                 //     before or after sending commands to the database.
 
                 bSuccess = false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // made it pretty far - something went terribly wrong.
 

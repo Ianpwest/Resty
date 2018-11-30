@@ -37,9 +37,6 @@ namespace Resty.Utilities
                 //If successfully validated generate new token for user
                 if(returnModel.bSuccessful)
                 {
-                    //Get the users profile image URI
-                    returnModel.ProfileURI = GetUsersProfileImageURI(model.Email);
-
                     returnModel.Token = AccountUtilities.GenerateToken();
                     
                     //Store Token for user
@@ -174,40 +171,25 @@ namespace Resty.Utilities
             }
         }
 
-        internal static string GetUsersProfileImageURI(string email)
-        {
-            string fileName = string.Empty;
-            using (IAccountRepository repo = new AccountRepository())
-            {
-                fileName = repo.GetUsersProfileImageFileName(email);
-            }
-
-            string URI = string.Empty;
-            using (IImageRepository repo2 = new ImageRepository())
-            {
-                URI = repo2.GetImageSASLongExpirationURI(fileName);
-            }
-
-            return URI;
-        }
-
         private static bool SendActivationEmail(string email, string activationToken)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(activationToken))
                 return false;
 
             // Create the email object first, then add the properties.
-            var myMessage = new SendGridMessage();
+            var myMessage = new SendGridMessage
+            {
 
-            // Add the message properties.
-            myMessage.From = new MailAddress("AccountActivation@WithU.com");
+                // Add the message properties.
+                From = new MailAddress("AccountActivation@CLPTracker.com")
+            };
 
             myMessage.AddTo(email);
 
             myMessage.Subject = "Account activation";
 
             //Add the HTML and Text bodies
-            myMessage.Html = "<h4>Welcome to WithU! Please activate your account by clicking the link below</h4><br/>";
+            myMessage.Html = "<h4>Welcome to CLP Tracker! Please activate your account by clicking the link below</h4><br/>";
             myMessage.Html += "<a href='https://resty.azurewebsites.net/Activation/ActivateAccount?activationToken=" + activationToken + "'>Click me to activate</a>";
 
             // Create credentials, specifying your user name and password.
@@ -231,7 +213,7 @@ namespace Resty.Utilities
             var myMessage = new SendGridMessage();
 
             // Add the message properties.
-            myMessage.From = new MailAddress("PasswordReset@WithU.com");
+            myMessage.From = new MailAddress("PasswordReset@CLPTracker.com");
 
             myMessage.AddTo(email);
 

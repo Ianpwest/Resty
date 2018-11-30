@@ -1,20 +1,17 @@
 ﻿using DataManagement.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataManagement.Models;
 
 namespace DataManagement.Repositories
 {
     public class AccountRepository : BaseRepository, IAccountRepository
     {
-        private WithUDBEntities db { get; set; }
+        private CLPTrackerEntities db { get; set; }
 
         public AccountRepository()
         {
-            db = new WithUDBEntities();
+            db = new CLPTrackerEntities();
         }
 
         public bool IsEmailUnique(string email)
@@ -98,15 +95,16 @@ namespace DataManagement.Repositories
             if (account == null)
                 return false;
 
-            User user = new DataManagement.User();
-
-            user.FirstName = account.FirstName;
-            user.LastName = account.LastName;
-            user.Password = account.Password;
-            user.Salt = account.Salt;
-            user.EmailAddress = account.Email;
-            user.DateCreated = DateTime.Now;
-            user.ActivationToken = account.ActivationToken;
+            User user = new User
+            {
+                FirstName = account.FirstName,
+                LastName = account.LastName,
+                Password = account.Password,
+                Salt = account.Salt,
+                EmailAddress = account.Email,
+                DateCreated = DateTime.Now,
+                ActivationToken = account.ActivationToken
+            };
 
             db.User.Add(user);
 
@@ -234,19 +232,6 @@ namespace DataManagement.Repositories
         public void Dispose()
         {
             db.Dispose();
-        }
-
-        public string GetUsersProfileImageFileName(string email)
-        {
-            var user = (from r in db.User_File
-                        where r.UserId == email
-                        && r.IsProfile == true
-                        select r).FirstOrDefault();
-
-            if (user == null)
-                return string.Empty;
-
-            return user.FileId + Constants.Constants.PROFILE_IMAGE_SUFFIX;
         }
     }
 }

@@ -14,12 +14,6 @@ namespace DataManagement
     
     public partial class User
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User()
-        {
-            this.User_File = new HashSet<User_File>();
-        }
-    
         public string EmailAddress { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -30,8 +24,5 @@ namespace DataManagement
         public string ResetPasswordToken { get; set; }
         public bool IsActivated { get; set; }
         public string ActivationToken { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User_File> User_File { get; set; }
     }
 }

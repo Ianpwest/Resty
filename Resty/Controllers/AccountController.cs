@@ -1,13 +1,11 @@
 ﻿
 using DataManagement.Models;
-using Newtonsoft.Json;
 using Resty.Authorization;
-using Resty.Models;
 using Resty.Utilities;
 using System.Web.Http;
 namespace Resty.Controllers
 {
-   
+
     public class AccountController : ApiController
     {
         [HttpPost]

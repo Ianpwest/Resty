@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataManagement.Models
+﻿namespace DataManagement.Models
 {
     public class LogOnResultModel
     {
@@ -17,7 +11,5 @@ namespace DataManagement.Models
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
-
-        public string ProfileURI { get; set; }
     }
 }
