@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
-using Newtonsoft.Json;
+using DataManagement.Models;
 using Resty.Models;
+using Resty.Utilities;
 
 namespace Resty.Controllers
 {
@@ -12,6 +13,16 @@ namespace Resty.Controllers
 
             return Ok(new StatusModel() { Status = "Service running. No issues. Hi!" });
 
+        }
+
+        public IHttpActionResult LogUserActivity([FromBody] UserActivityModel userActivityModel)
+        {
+            if (userActivityModel == null)
+                return Content(System.Net.HttpStatusCode.BadRequest, new ServiceCallResultModel() { bSuccessful = false, FailureReason = "Request not formatted correctly." });
+
+            BeaconUtilities.LogUserActivity(userActivityModel);
+
+            return Ok(new ServiceCallResultModel() { bSuccessful = true });
         }
     }
 }

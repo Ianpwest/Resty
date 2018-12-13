@@ -220,6 +220,7 @@
     <Compile Include="Models\StatusModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\AccountUtilities.cs" />
+    <Compile Include="Utilities\BeaconUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

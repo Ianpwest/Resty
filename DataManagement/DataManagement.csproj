@@ -100,6 +100,7 @@
     </Compile>
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Interfaces\IAccountRepository.cs" />
+    <Compile Include="Interfaces\IBeaconRepository.cs" />
     <Compile Include="Interfaces\IImageRepository.cs" />
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\LogOnModel.cs" />
@@ -107,9 +108,14 @@
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\ServiceCallModel.cs" />
     <Compile Include="Models\ServiceCallResultModel.cs" />
+    <Compile Include="Models\UserActivityModel.cs" />
     <Compile Include="Repositories\AccountRepository.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
+    <Compile Include="Repositories\BeaconRepository.cs" />
     <Compile Include="User.cs">
+      <DependentUpon>CLPTracker.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserActivity.cs">
       <DependentUpon>CLPTracker.tt</DependentUpon>
     </Compile>
     <Compile Include="Utilities\ImageUtilities.cs" />

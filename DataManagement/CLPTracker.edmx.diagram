@@ -6,6 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="f8c5857cf3ae46fa8339b7c90c6b4a1b" Name="Diagram1">
         <EntityTypeShape EntityType="CLPTrackerModel.User" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CLPTrackerModel.UserActivity" Width="1.5" PointX="3.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

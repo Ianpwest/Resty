@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CLPTrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CLPTrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--Errors Found During Generation:
 warning 6002: The table/view 'CLPTracker.dbo.User' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="User">
@@ -28,6 +28,19 @@ warning 6002: The table/view 'CLPTracker.dbo.User' does not have a primary key d
           <Property Name="IsActivated" Type="bit" Nullable="false" />
           <Property Name="ActivationToken" Type="varchar" MaxLength="50" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CLPTracker.dbo.UserActivity' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="UserActivity">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="BeaconId" />
+            <PropertyRef Name="DateReceived" />
+          </Key>
+          <Property Name="UserId" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="BeaconId" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="BeaconDistance" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateReceived" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityContainer Name="CLPTrackerModelStoreContainer">
           <EntitySet Name="User" EntityType="Self.User" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -43,9 +56,16 @@ warning 6002: The table/view 'CLPTracker.dbo.User' does not have a primary key d
     [User].[ActivationToken] AS [ActivationToken]
     FROM [dbo].[User] AS [User]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="UserActivity" EntityType="Self.UserActivity" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [UserActivity].[UserId] AS [UserId], 
+    [UserActivity].[BeaconId] AS [BeaconId], 
+    [UserActivity].[BeaconDistance] AS [BeaconDistance], 
+    [UserActivity].[DateReceived] AS [DateReceived]
+    FROM [dbo].[UserActivity] AS [UserActivity]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CLPTrackerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -72,7 +92,19 @@ warning 6002: The table/view 'CLPTracker.dbo.User' does not have a primary key d
         </EntityType>
         <EntityContainer Name="CLPTrackerEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="UserActivity" EntityType="CLPTrackerModel.UserActivity" />
         </EntityContainer>
+        <EntityType Name="UserActivity">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="BeaconId" />
+            <PropertyRef Name="DateReceived" />
+          </Key>
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="BeaconId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="BeaconDistance" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateReceived" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -92,6 +124,16 @@ warning 6002: The table/view 'CLPTracker.dbo.User' does not have a primary key d
                 <ScalarProperty Name="ResetPasswordToken" ColumnName="ResetPasswordToken" />
                 <ScalarProperty Name="IsActivated" ColumnName="IsActivated" />
                 <ScalarProperty Name="ActivationToken" ColumnName="ActivationToken" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserActivity">
+            <EntityTypeMapping TypeName="CLPTrackerModel.UserActivity">
+              <MappingFragment StoreEntitySet="UserActivity">
+                <ScalarProperty Name="DateReceived" ColumnName="DateReceived" />
+                <ScalarProperty Name="BeaconDistance" ColumnName="BeaconDistance" />
+                <ScalarProperty Name="BeaconId" ColumnName="BeaconId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
